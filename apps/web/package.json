@@ -1,0 +1,11 @@
+{
+  "name": "@viraplaza/web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"Web scaffold placeholder — Next.js lands in later commit\"",
+    "build": "echo \"Web scaffold placeholder\"",
+    "lint": "echo \"Web scaffold placeholder\"",
+    "test": "echo \"Web scaffold placeholder\""
+  }
+}

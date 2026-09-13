@@ -1,0 +1,11 @@
+{
+  "name": "@viraplaza/api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"API scaffold placeholder — NestJS lands in next commit\"",
+    "build": "echo \"API scaffold placeholder\"",
+    "lint": "echo \"API scaffold placeholder\"",
+    "test": "echo \"API scaffold placeholder\""
+  }
+}
