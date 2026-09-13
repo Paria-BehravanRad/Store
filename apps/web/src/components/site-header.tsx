@@ -71,6 +71,11 @@ export function SiteHeader() {
     router.refresh();
   }
 
+  const languageOptions = locales.map((l) => ({
+    value: l,
+    label: LOCALE_LABELS[l],
+  }));
+
   const desktopNav = (
     <>
       <NavLink href="/" active={pathname === '/'} variant="desktop">
@@ -91,11 +96,11 @@ export function SiteHeader() {
   return (
     <>
       <header className="site-header sticky top-0 z-50 border-b backdrop-blur-glass">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-5 md:py-3.5">
-          <div className="flex min-w-0 items-center gap-2.5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-3 sm:gap-3 sm:px-5 md:py-3.5">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
             <button
               type="button"
-              className="nav-icon-btn lg:hidden"
+              className="nav-icon-btn shrink-0 lg:hidden"
               aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
               aria-expanded={menuOpen}
               aria-controls="mobile-side-drawer"
@@ -105,7 +110,7 @@ export function SiteHeader() {
             </button>
             <Link
               href="/"
-              className="brand-mark truncate text-xl tracking-tight text-ink-900 sm:text-2xl md:text-[1.65rem]"
+              className="brand-mark truncate text-lg tracking-tight text-ink-900 sm:text-2xl md:text-[1.65rem]"
             >
               {t('brand')}
             </Link>
@@ -113,29 +118,28 @@ export function SiteHeader() {
 
           <nav className="hidden items-center gap-1 lg:flex">{desktopNav}</nav>
 
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5">
             <button
               type="button"
-              className="nav-icon-btn"
+              className="nav-icon-btn hidden lg:inline-flex"
               aria-label={theme === 'dark' ? t('common.lightTheme') : t('common.darkTheme')}
               onClick={toggleTheme}
             >
               {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
             </button>
 
-            <GlassSelect
-              ariaLabel={t('common.language')}
-              value={locale}
-              align="end"
-              options={locales.map((l) => ({
-                value: l,
-                label: LOCALE_LABELS[l],
-              }))}
-              onChange={(v) => void setLocale(v)}
-              triggerClassName="!min-w-0 !px-2.5 !py-2 text-xs sm:!px-3 sm:text-sm"
-            />
+            <div className="hidden lg:block">
+              <GlassSelect
+                ariaLabel={t('common.language')}
+                value={locale}
+                align="end"
+                options={languageOptions}
+                onChange={(v) => void setLocale(v)}
+                triggerClassName="!min-w-0 !px-3 !py-2 text-sm"
+              />
+            </div>
 
-            <div className="relative">
+            <div className="relative min-w-0">
               {loading ? (
                 <div className="profile-skeleton" aria-hidden />
               ) : user ? (
@@ -150,7 +154,7 @@ export function SiteHeader() {
                     <span className="profile-avatar" aria-hidden>
                       {user.phone.slice(-2)}
                     </span>
-                    <span className="hidden min-w-0 flex-col text-start sm:flex">
+                    <span className="flex min-w-0 flex-col text-start">
                       <span className="truncate text-xs font-medium text-ink-900">
                         {t('nav.account')}
                       </span>
@@ -161,7 +165,7 @@ export function SiteHeader() {
                     <svg
                       aria-hidden
                       viewBox="0 0 20 20"
-                      className={`hidden h-3.5 w-3.5 text-ink-700 transition sm:block ${
+                      className={`h-3.5 w-3.5 shrink-0 text-ink-700 transition ${
                         profileOpen ? 'rotate-180' : ''
                       }`}
                       fill="none"
@@ -179,7 +183,7 @@ export function SiteHeader() {
                     open={profileOpen}
                     onClose={() => setProfileOpen(false)}
                     align="end"
-                    className="w-[15.5rem]"
+                    className="w-[min(15.5rem,calc(100vw-1.5rem))]"
                   >
                     <div className="border-b border-ink-900/8 px-3.5 py-3">
                       <p className="text-xs text-ink-700">{t('nav.signedInAs')}</p>
@@ -220,7 +224,7 @@ export function SiteHeader() {
                   <span className="profile-avatar profile-avatar-guest" aria-hidden>
                     <UserIcon />
                   </span>
-                  <span className="hidden sm:inline">{t('nav.login')}</span>
+                  <span>{t('nav.login')}</span>
                 </Link>
               )}
             </div>
@@ -283,48 +287,29 @@ export function SiteHeader() {
                   {count > 0 ? <span className="nav-badge">{count}</span> : null}
                 </span>
               </NavLink>
-
-              <div className="my-3 border-t border-ink-900/10" />
-
-              {!loading && user ? (
-                <>
-                  <div className="rounded-2xl bg-ink-900/5 px-3 py-3">
-                    <p className="text-xs text-ink-700">{t('nav.signedInAs')}</p>
-                    <p className="mt-0.5 text-sm font-medium text-ink-900" dir="ltr">
-                      {user.phone}
-                    </p>
-                  </div>
-                  {isAdmin ? (
-                    <NavLink
-                      href="/admin"
-                      active={pathname.startsWith('/admin')}
-                      variant="drawer"
-                      onNavigate={() => setMenuOpen(false)}
-                    >
-                      {t('nav.admin')}
-                    </NavLink>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="rounded-xl px-3 py-3 text-start text-base text-red-800 transition hover:bg-ink-900/5"
-                    onClick={() => void onLogout()}
-                  >
-                    {t('nav.logout')}
-                  </button>
-                </>
-              ) : (
+              {!loading && isAdmin ? (
                 <NavLink
-                  href="/login"
-                  active={pathname.startsWith('/login')}
+                  href="/admin"
+                  active={pathname.startsWith('/admin')}
                   variant="drawer"
                   onNavigate={() => setMenuOpen(false)}
                 >
-                  {t('nav.login')}
+                  {t('nav.admin')}
                 </NavLink>
-              )}
+              ) : null}
             </nav>
 
-            <div className="border-t border-ink-900/10 px-4 py-4">
+            <div className="space-y-3 border-t border-ink-900/10 px-4 py-4">
+              <div className="space-y-1.5">
+                <p className="px-0.5 text-xs font-medium text-ink-700">{t('common.language')}</p>
+                <GlassSelect
+                  fullWidth
+                  ariaLabel={t('common.language')}
+                  value={locale}
+                  options={languageOptions}
+                  onChange={(v) => void setLocale(v)}
+                />
+              </div>
               <button
                 type="button"
                 className="btn-ghost w-full justify-between"
@@ -413,7 +398,10 @@ function SunIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7">
       <circle cx="12" cy="12" r="4" />
-      <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19" strokeLinecap="round" />
+      <path
+        d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

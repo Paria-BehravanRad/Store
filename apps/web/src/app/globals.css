@@ -302,7 +302,7 @@ html.dark .site-glow {
   }
 
   .profile-trigger {
-    @apply inline-flex max-w-[11rem] items-center gap-2 rounded-2xl border py-1.5 pe-2.5 ps-1.5 shadow-sm backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 sm:max-w-[14rem];
+    @apply inline-flex max-w-[11rem] items-center gap-2 rounded-2xl border p-1.5 shadow-sm backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 sm:max-w-[14rem];
     border-color: var(--vp-glass-border);
     background: color-mix(in srgb, var(--vp-glass) 85%, transparent);
     color: var(--vp-ink);
@@ -349,7 +349,7 @@ html.dark .site-glow {
   }
 
   .profile-skeleton {
-    @apply h-10 w-10 animate-pulse rounded-2xl sm:w-28;
+    @apply h-10 w-28 animate-pulse rounded-2xl sm:w-32;
     background: color-mix(in srgb, var(--vp-glass) 90%, transparent);
   }
 
