@@ -7,6 +7,7 @@ import { RedisModule } from './redis/redis.module';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { CatalogModule } from './catalog/catalog.module';
 import { validateEnv } from './config/env.validation';
 
 @Module({
@@ -27,6 +28,7 @@ import { validateEnv } from './config/env.validation';
     HealthModule,
     AuthModule,
     UsersModule,
+    CatalogModule,
   ],
   providers: [
     {
