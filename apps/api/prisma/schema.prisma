@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Locale {
+  en
+  fa
+  de
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  INITIATED
+  REDIRECTED
+  SUCCESS
+  FAILED
+  REVERSED
+}
+
+model User {
+  id               String    @id @default(cuid())
+  phone            String    @unique
+  role             Role      @default(CUSTOMER)
+  preferredLocale  Locale?
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  orders           Order[]
+  refreshTokens    RefreshToken[]
+
+  @@index([role])
+  @@index([isActive])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model OtpChallenge {
+  id        String   @id @default(cuid())
+  phone     String
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone, consumed])
+  @@index([expiresAt])
+}
+
+model SiteSettings {
+  id            Int    @id @default(1)
+  defaultLocale Locale @default(en)
+  storeName     String @default("ViraPlaza")
+  updatedAt     DateTime @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  nameEn      String
+  nameFa      String
+  nameDe      String
+  slug        String    @unique
+  description String?
+  sortOrder   Int       @default(0)
+  isPublished Boolean   @default(true)
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@index([isPublished, sortOrder])
+}
+
+model Product {
+  id           String      @id @default(cuid())
+  categoryId   String
+  nameEn       String
+  nameFa       String
+  nameDe       String
+  slug         String      @unique
+  descriptionEn String?
+  descriptionFa String?
+  descriptionDe String?
+  priceRials   Int
+  stock        Int         @default(0)
+  imageUrls    String[]
+  isPublished  Boolean     @default(true)
+  deletedAt    DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  category     Category    @relation(fields: [categoryId], references: [id])
+  orderItems   OrderItem[]
+
+  @@index([categoryId])
+  @@index([isPublished, deletedAt])
+  @@index([priceRials])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  status          OrderStatus @default(PENDING_PAYMENT)
+  totalRials      Int
+  shippingAddress String?
+  note            String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User        @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  payments        Payment[]
+
+  @@index([userId])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  productId  String
+  quantity   Int
+  unitPrice  Int
+  productName String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product    Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String
+  gateway       String        @default("SEP")
+  status        PaymentStatus @default(INITIATED)
+  amountRials   Int
+  resNum        String        @unique
+  refNum        String?
+  token         String?
+  gatewayRaw    Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([status])
+  @@index([refNum])
+}
