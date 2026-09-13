@@ -10,7 +10,8 @@
     "account": "Konto",
     "signedInAs": "Angemeldet als",
     "openMenu": "Menü öffnen",
-    "closeMenu": "Menü schließen"
+    "closeMenu": "Menü schließen",
+    "menu": "Menü"
   },
   "home": {
     "headline": "Ruhiger Luxus für den Alltag.",
@@ -64,6 +65,8 @@
   "common": {
     "loading": "Laden…",
     "save": "Speichern",
-    "language": "Sprache"
+    "language": "Sprache",
+    "darkTheme": "Dunkles Design",
+    "lightTheme": "Helles Design"
   }
 }

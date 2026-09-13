@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
@@ -26,6 +27,7 @@ module.exports = {
       },
       boxShadow: {
         glass: '0 8px 32px rgba(28, 25, 23, 0.12)',
+        'glass-dark': '0 12px 40px rgba(0, 0, 0, 0.45)',
       },
       backdropBlur: {
         glass: '18px',
@@ -39,10 +41,20 @@ module.exports = {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
         },
+        'drawer-in': {
+          '0%': { transform: 'translateX(var(--drawer-from))', opacity: '0.85' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'backdrop-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 0.7s ease-out both',
         shimmer: 'shimmer 8s linear infinite',
+        'drawer-in': 'drawer-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'backdrop-in': 'backdrop-in 0.2s ease-out both',
       },
     },
   },

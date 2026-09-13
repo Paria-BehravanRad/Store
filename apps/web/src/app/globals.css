@@ -6,9 +6,33 @@
   --vp-bg-0: #f6f1e8;
   --vp-bg-1: #ebe2d3;
   --vp-ink: #1c1917;
+  --vp-ink-muted: #44403c;
   --vp-accent: #8a6230;
   --vp-glass: rgba(255, 255, 255, 0.52);
   --vp-glass-border: rgba(255, 255, 255, 0.42);
+  --vp-header: rgba(255, 255, 255, 0.45);
+  --vp-drawer: rgba(252, 249, 244, 0.94);
+  --vp-overlay: rgba(28, 25, 23, 0.42);
+  --drawer-from: -100%;
+  color-scheme: light;
+}
+
+html.dark {
+  --vp-bg-0: #100e0c;
+  --vp-bg-1: #1a1612;
+  --vp-ink: #f4efe6;
+  --vp-ink-muted: #b7aea1;
+  --vp-accent: #d4b483;
+  --vp-glass: rgba(36, 31, 26, 0.72);
+  --vp-glass-border: rgba(255, 255, 255, 0.1);
+  --vp-header: rgba(18, 15, 12, 0.72);
+  --vp-drawer: rgba(22, 18, 14, 0.96);
+  --vp-overlay: rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
+}
+
+html[dir='rtl'] {
+  --drawer-from: 100%;
 }
 
 html {
@@ -20,11 +44,18 @@ body {
   min-height: 100vh;
   background-color: var(--vp-bg-0);
   background-image:
-    linear-gradient(180deg, rgba(246, 241, 232, 0.82), rgba(235, 226, 211, 0.9)),
+    linear-gradient(180deg, color-mix(in srgb, var(--vp-bg-0) 82%, transparent), color-mix(in srgb, var(--vp-bg-1) 90%, transparent)),
     url('/images/ambient-backdrop.jpg');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html.dark body {
+  background-image:
+    linear-gradient(180deg, rgba(16, 14, 12, 0.88), rgba(26, 22, 18, 0.92)),
+    url('/images/ambient-backdrop.jpg');
 }
 
 @media (max-width: 640px) {
@@ -68,106 +99,331 @@ html[lang='fa'] .brand-mark {
   opacity: 0.9;
 }
 
+html.dark .site-glow {
+  background:
+    radial-gradient(900px 420px at 12% -8%, rgba(184, 137, 74, 0.18), transparent 60%),
+    radial-gradient(700px 360px at 88% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
+    linear-gradient(
+      110deg,
+      transparent 18%,
+      rgba(255, 255, 255, 0.06) 48%,
+      transparent 72%
+    );
+  background-size: auto, auto, 220% 100%;
+  opacity: 0.75;
+}
+
 @layer components {
   .glass {
-    @apply border border-white/40 bg-white/50 shadow-glass backdrop-blur-glass;
+    @apply border shadow-glass backdrop-blur-glass;
+    border-color: var(--vp-glass-border);
+    background: var(--vp-glass);
   }
 
   .glass-strong {
-    @apply border border-white/50 bg-white/70 shadow-glass backdrop-blur-xl;
+    @apply border shadow-glass backdrop-blur-xl;
+    border-color: var(--vp-glass-border);
+    background: color-mix(in srgb, var(--vp-glass) 88%, white 12%);
+  }
+
+  html.dark .glass-strong {
+    background: color-mix(in srgb, var(--vp-glass) 90%, black 10%);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-2xl bg-ink-900 px-4 py-2.5 text-sm font-medium text-champagne-50 transition duration-200 hover:bg-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 active:scale-[0.98] sm:px-5;
+    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-medium transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 active:scale-[0.98] sm:px-5;
+    background: #1c1917;
+    color: #fbf7f0;
+  }
+
+  .btn-primary:hover {
+    background: #292524;
+  }
+
+  html.dark .btn-primary {
+    background: #f3ead8;
+    color: #1c1917;
+  }
+
+  html.dark .btn-primary:hover {
+    background: #fff;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-2xl border border-ink-900/10 bg-white/40 px-4 py-2.5 text-sm font-medium text-ink-900 transition duration-200 hover:bg-white/70 active:scale-[0.98] sm:px-5;
+    @apply inline-flex items-center justify-center rounded-2xl border px-4 py-2.5 text-sm font-medium transition duration-200 active:scale-[0.98] sm:px-5;
+    border-color: color-mix(in srgb, var(--vp-ink) 12%, transparent);
+    background: color-mix(in srgb, var(--vp-glass) 70%, transparent);
+    color: var(--vp-ink);
+  }
+
+  .btn-ghost:hover {
+    background: color-mix(in srgb, var(--vp-glass) 100%, white 20%);
   }
 
   .field {
-    @apply w-full rounded-2xl border border-ink-900/10 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-champagne-500 focus:bg-white/90;
+    @apply w-full rounded-2xl border px-4 py-3 text-sm outline-none transition;
+    border-color: color-mix(in srgb, var(--vp-ink) 12%, transparent);
+    background: color-mix(in srgb, var(--vp-glass) 85%, white 15%);
+    color: var(--vp-ink);
+  }
+
+  .field:focus {
+    border-color: #b8894a;
+    background: color-mix(in srgb, var(--vp-glass) 70%, white 30%);
+  }
+
+  html.dark .field:focus {
+    background: color-mix(in srgb, var(--vp-glass) 80%, black 20%);
   }
 
   .section-title {
-    @apply font-display text-[1.75rem] tracking-tight text-ink-900 sm:text-3xl md:text-4xl;
+    @apply font-display text-[1.75rem] tracking-tight sm:text-3xl md:text-4xl;
+    color: var(--vp-ink);
   }
 
   .chip {
-    @apply rounded-full border border-ink-900/10 bg-white/45 px-3 py-1.5 text-xs font-medium text-ink-800 transition hover:bg-white/75 sm:px-3.5;
+    @apply rounded-full border px-3 py-1.5 text-xs font-medium transition sm:px-3.5;
+    border-color: color-mix(in srgb, var(--vp-ink) 12%, transparent);
+    background: color-mix(in srgb, var(--vp-glass) 80%, transparent);
+    color: var(--vp-ink);
+  }
+
+  .chip:hover {
+    background: color-mix(in srgb, var(--vp-glass) 100%, white 15%);
   }
 
   .chip-active {
-    @apply border-ink-900/20 bg-ink-900 text-champagne-50 hover:bg-ink-800;
+    background: #1c1917;
+    border-color: transparent;
+    color: #fbf7f0;
+  }
+
+  .chip-active:hover {
+    background: #292524;
+  }
+
+  html.dark .chip-active {
+    background: #f3ead8;
+    color: #1c1917;
+  }
+
+  html.dark .chip-active:hover {
+    background: #fff;
   }
 
   .glass-select-trigger {
-    @apply inline-flex min-h-10 items-center justify-between gap-2 rounded-2xl border border-white/50 bg-white/55 px-3 py-2 text-sm text-ink-900 shadow-sm backdrop-blur-md transition hover:bg-white/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-10 items-center justify-between gap-2 rounded-2xl border px-3 py-2 text-sm shadow-sm backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 disabled:cursor-not-allowed disabled:opacity-50;
+    border-color: var(--vp-glass-border);
+    background: color-mix(in srgb, var(--vp-glass) 88%, transparent);
+    color: var(--vp-ink);
+  }
+
+  .glass-select-trigger:hover {
+    background: color-mix(in srgb, var(--vp-glass) 100%, white 12%);
   }
 
   .glass-menu {
-    @apply absolute z-50 mt-2 overflow-hidden rounded-2xl border border-white/55 bg-white/80 p-1.5 shadow-glass backdrop-blur-xl animate-fade-up;
+    @apply absolute z-50 mt-2 overflow-hidden rounded-2xl border p-1.5 backdrop-blur-xl animate-fade-up;
+    border-color: var(--vp-glass-border);
+    background: color-mix(in srgb, var(--vp-drawer) 92%, transparent);
+    box-shadow: 0 12px 40px rgba(28, 25, 23, 0.14);
+  }
+
+  html.dark .glass-menu {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
   }
 
   .glass-menu-item {
-    @apply flex w-full flex-col rounded-xl px-3 py-2.5 text-start text-sm text-ink-900 transition hover:bg-ink-900/5;
+    @apply flex w-full flex-col rounded-xl px-3 py-2.5 text-start text-sm transition;
+    color: var(--vp-ink);
+  }
+
+  .glass-menu-item:hover {
+    background: color-mix(in srgb, var(--vp-ink) 6%, transparent);
   }
 
   .glass-menu-item.is-active {
-    @apply bg-ink-900 text-champagne-50 hover:bg-ink-800;
+    background: #1c1917;
+    color: #fbf7f0;
   }
 
-  .glass-menu-item.is-active .text-ink-700\/80 {
-    @apply text-champagne-100/80;
+  .glass-menu-item.is-active:hover {
+    background: #292524;
   }
 
-  .nav-link {
-    @apply rounded-xl px-3 py-2 text-sm text-ink-800 transition;
-  }
-
-  .nav-desktop-link {
-    @apply hover:bg-white/50 hover:text-ink-950;
-  }
-
-  .nav-desktop-link.is-active {
-    @apply bg-white/60 font-medium text-ink-950;
-  }
-
-  .nav-mobile-link {
-    @apply block w-full px-3 py-3 text-base;
-  }
-
-  .nav-mobile-link.is-active {
-    @apply bg-white/70 font-medium text-ink-950;
+  html.dark .glass-menu-item.is-active {
+    background: #f3ead8;
+    color: #1c1917;
   }
 
   .nav-badge {
-    @apply inline-flex min-w-5 items-center justify-center rounded-full bg-ink-900 px-1.5 py-0.5 text-[10px] leading-none text-white;
+    @apply inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] leading-none;
+    background: #1c1917;
+    color: #fff;
+  }
+
+  html.dark .nav-badge {
+    background: #f3ead8;
+    color: #1c1917;
   }
 
   .nav-icon-btn {
-    @apply inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/50 bg-white/50 text-ink-900 backdrop-blur-md transition hover:bg-white/75;
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-2xl border backdrop-blur-md transition;
+    border-color: var(--vp-glass-border);
+    background: color-mix(in srgb, var(--vp-glass) 80%, transparent);
+    color: var(--vp-ink);
+  }
+
+  .nav-icon-btn:hover {
+    background: color-mix(in srgb, var(--vp-glass) 100%, white 12%);
   }
 
   .profile-trigger {
-    @apply inline-flex max-w-[11rem] items-center gap-2 rounded-2xl border border-white/50 bg-white/55 py-1.5 pe-2.5 ps-1.5 text-ink-900 shadow-sm backdrop-blur-md transition hover:bg-white/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 sm:max-w-[14rem];
+    @apply inline-flex max-w-[11rem] items-center gap-2 rounded-2xl border py-1.5 pe-2.5 ps-1.5 shadow-sm backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 sm:max-w-[14rem];
+    border-color: var(--vp-glass-border);
+    background: color-mix(in srgb, var(--vp-glass) 85%, transparent);
+    color: var(--vp-ink);
+  }
+
+  .profile-trigger:hover {
+    background: color-mix(in srgb, var(--vp-glass) 100%, white 12%);
   }
 
   .profile-guest-btn {
-    @apply inline-flex items-center gap-2 rounded-2xl border border-ink-900/15 bg-ink-900 px-2 py-1.5 text-sm font-medium text-champagne-50 shadow-sm transition hover:bg-ink-800 sm:px-3;
+    @apply inline-flex items-center gap-2 rounded-2xl border px-2 py-1.5 text-sm font-medium shadow-sm transition sm:px-3;
+    border-color: transparent;
+    background: #1c1917;
+    color: #fbf7f0;
+  }
+
+  .profile-guest-btn:hover {
+    background: #292524;
+  }
+
+  html.dark .profile-guest-btn {
+    background: #f3ead8;
+    color: #1c1917;
+  }
+
+  html.dark .profile-guest-btn:hover {
+    background: #fff;
   }
 
   .profile-avatar {
-    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-champagne-100 to-champagne-300 text-[11px] font-semibold text-ink-900;
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-champagne-100 to-champagne-300 text-[11px] font-semibold;
+    color: #1c1917;
   }
 
   .profile-avatar-guest {
-    @apply bg-white/15 text-champagne-50 from-transparent to-transparent;
+    @apply from-transparent to-transparent;
+    background: rgb(255 255 255 / 0.15);
+    color: #fbf7f0;
+  }
+
+  html.dark .profile-avatar-guest {
+    background: rgb(28 25 23 / 0.12);
+    color: #1c1917;
   }
 
   .profile-skeleton {
-    @apply h-10 w-10 animate-pulse rounded-2xl bg-white/50 sm:w-28;
+    @apply h-10 w-10 animate-pulse rounded-2xl sm:w-28;
+    background: color-mix(in srgb, var(--vp-glass) 90%, transparent);
   }
+
+  .site-header {
+    border-color: var(--vp-glass-border);
+    background: var(--vp-header);
+  }
+
+  .side-drawer-backdrop {
+    @apply fixed inset-0 z-[60] lg:hidden animate-backdrop-in;
+    background: var(--vp-overlay);
+    backdrop-filter: blur(2px);
+  }
+
+  .side-drawer {
+    @apply fixed inset-y-0 z-[70] flex w-[min(20rem,86vw)] flex-col border shadow-glass backdrop-blur-xl lg:hidden animate-drawer-in;
+    inset-inline-start: 0;
+    border-color: var(--vp-glass-border);
+    background: var(--vp-drawer);
+  }
+
+  html.dark .side-drawer {
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Soft remap of hard-coded ink utilities under dark theme */
+html.dark .text-ink-950,
+html.dark .text-ink-900 {
+  color: #f4efe6;
+}
+
+html.dark .text-ink-800 {
+  color: #e4ddd2;
+}
+
+html.dark .text-ink-700 {
+  color: #b7aea1;
+}
+
+html.dark .text-ink-700\/80,
+html.dark .text-ink-700\/75 {
+  color: rgb(183 174 161 / 0.8);
+}
+
+html.dark .hover\:text-ink-950:hover {
+  color: #fffaf3;
+}
+
+html.dark .border-ink-900\/5,
+html.dark .border-ink-900\/8,
+html.dark .border-ink-900\/10,
+html.dark .border-ink-900\/15,
+html.dark .border-white\/25,
+html.dark .border-white\/30,
+html.dark .border-white\/40,
+html.dark .border-white\/50 {
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+html.dark .bg-white\/25,
+html.dark .bg-white\/40,
+html.dark .bg-white\/45,
+html.dark .bg-white\/50,
+html.dark .bg-white\/55,
+html.dark .bg-white\/60,
+html.dark .bg-white\/70,
+html.dark .bg-white\/75 {
+  background-color: rgb(255 255 255 / 0.06);
+}
+
+html.dark .bg-white\/80 {
+  background-color: rgb(28 24 20 / 0.88);
+}
+
+html.dark .text-red-800 {
+  color: #fca5a5;
+}
+
+html.dark .text-emerald-800 {
+  color: #6ee7b7;
+}
+
+html.dark .bg-ink-900\/5,
+html.dark .hover\:bg-ink-900\/5:hover {
+  background-color: rgb(255 255 255 / 0.05);
+}
+
+html.dark .divide-ink-900\/10 > :not([hidden]) ~ :not([hidden]),
+html.dark .border-ink-900\/10 {
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+html.dark .ring-white\/45,
+html.dark .ring-white\/50 {
+  --tw-ring-color: rgb(255 255 255 / 0.12);
 }
 
 @keyframes shimmer {

@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { locales, type AppLocale } from '@/i18n/config';
 import { useCart } from '@/lib/cart';
 import { useAuth } from '@/lib/auth';
+import { useTheme } from '@/lib/theme';
 import { apiFetch } from '@/lib/api';
 import { GlassMenu, GlassSelect } from '@/components/glass-select';
 
@@ -23,6 +24,7 @@ export function SiteHeader() {
   const router = useRouter();
   const { count } = useCart();
   const { user, isAdmin, loading, logout, refresh } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -36,6 +38,15 @@ export function SiteHeader() {
     return () => {
       document.body.style.overflow = '';
     };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setMenuOpen(false);
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [menuOpen]);
 
   async function setLocale(next: AppLocale) {
@@ -54,28 +65,21 @@ export function SiteHeader() {
 
   async function onLogout() {
     setProfileOpen(false);
+    setMenuOpen(false);
     await logout();
     router.push('/');
     router.refresh();
   }
 
-  const navLinks = (
+  const desktopNav = (
     <>
-      <NavLink href="/" active={pathname === '/'} onNavigate={() => setMenuOpen(false)}>
+      <NavLink href="/" active={pathname === '/'} variant="desktop">
         {t('nav.home')}
       </NavLink>
-      <NavLink
-        href="/shop"
-        active={pathname.startsWith('/shop')}
-        onNavigate={() => setMenuOpen(false)}
-      >
+      <NavLink href="/shop" active={pathname.startsWith('/shop')} variant="desktop">
         {t('nav.shop')}
       </NavLink>
-      <NavLink
-        href="/cart"
-        active={pathname.startsWith('/cart')}
-        onNavigate={() => setMenuOpen(false)}
-      >
+      <NavLink href="/cart" active={pathname.startsWith('/cart')} variant="desktop">
         <span className="inline-flex items-center gap-2">
           {t('nav.cart')}
           {count > 0 ? <span className="nav-badge">{count}</span> : null}
@@ -85,172 +89,255 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/25 bg-white/45 backdrop-blur-glass">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-5 md:py-3.5">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <button
-            type="button"
-            className="nav-icon-btn lg:hidden"
-            aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            <MenuIcon open={menuOpen} />
-          </button>
-          <Link
-            href="/"
-            className="brand-mark truncate text-xl tracking-tight text-ink-900 sm:text-2xl md:text-[1.65rem]"
-          >
-            {t('brand')}
-          </Link>
-        </div>
+    <>
+      <header className="site-header sticky top-0 z-50 border-b backdrop-blur-glass">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-5 md:py-3.5">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <button
+              type="button"
+              className="nav-icon-btn lg:hidden"
+              aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-side-drawer"
+              onClick={() => setMenuOpen(true)}
+            >
+              <MenuIcon open={false} />
+            </button>
+            <Link
+              href="/"
+              className="brand-mark truncate text-xl tracking-tight text-ink-900 sm:text-2xl md:text-[1.65rem]"
+            >
+              {t('brand')}
+            </Link>
+          </div>
 
-        <nav className="hidden items-center gap-1 lg:flex">{navLinks}</nav>
+          <nav className="hidden items-center gap-1 lg:flex">{desktopNav}</nav>
 
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          <GlassSelect
-            ariaLabel={t('common.language')}
-            value={locale}
-            align="end"
-            options={locales.map((l) => ({
-              value: l,
-              label: LOCALE_LABELS[l],
-            }))}
-            onChange={(v) => void setLocale(v)}
-            triggerClassName="!min-w-0 !px-2.5 !py-2 text-xs sm:!px-3 sm:text-sm"
-          />
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <button
+              type="button"
+              className="nav-icon-btn"
+              aria-label={theme === 'dark' ? t('common.lightTheme') : t('common.darkTheme')}
+              onClick={toggleTheme}
+            >
+              {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+            </button>
 
-          <div className="relative">
-            {loading ? (
-              <div className="profile-skeleton" aria-hidden />
-            ) : user ? (
-              <>
-                <button
-                  type="button"
-                  className="profile-trigger"
-                  aria-haspopup="menu"
-                  aria-expanded={profileOpen}
-                  onClick={() => setProfileOpen((v) => !v)}
-                >
-                  <span className="profile-avatar" aria-hidden>
-                    {user.phone.slice(-2)}
-                  </span>
-                  <span className="hidden min-w-0 flex-col text-start sm:flex">
-                    <span className="truncate text-xs font-medium text-ink-900">
-                      {t('nav.account')}
-                    </span>
-                    <span className="truncate text-[11px] text-ink-700" dir="ltr">
-                      {user.phone}
-                    </span>
-                  </span>
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 20 20"
-                    className={`hidden h-3.5 w-3.5 text-ink-700 transition sm:block ${
-                      profileOpen ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
+            <GlassSelect
+              ariaLabel={t('common.language')}
+              value={locale}
+              align="end"
+              options={locales.map((l) => ({
+                value: l,
+                label: LOCALE_LABELS[l],
+              }))}
+              onChange={(v) => void setLocale(v)}
+              triggerClassName="!min-w-0 !px-2.5 !py-2 text-xs sm:!px-3 sm:text-sm"
+            />
+
+            <div className="relative">
+              {loading ? (
+                <div className="profile-skeleton" aria-hidden />
+              ) : user ? (
+                <>
+                  <button
+                    type="button"
+                    className="profile-trigger"
+                    aria-haspopup="menu"
+                    aria-expanded={profileOpen}
+                    onClick={() => setProfileOpen((v) => !v)}
                   >
-                    <path
-                      d="M5 7.5 10 12.5 15 7.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                <GlassMenu
-                  open={profileOpen}
-                  onClose={() => setProfileOpen(false)}
-                  align="end"
-                  className="w-[15.5rem]"
-                >
-                  <div className="border-b border-ink-900/8 px-3.5 py-3">
-                    <p className="text-xs text-ink-700">{t('nav.signedInAs')}</p>
-                    <p className="mt-0.5 truncate text-sm font-medium text-ink-900" dir="ltr">
-                      {user.phone}
-                    </p>
-                  </div>
-                  {isAdmin ? (
+                    <span className="profile-avatar" aria-hidden>
+                      {user.phone.slice(-2)}
+                    </span>
+                    <span className="hidden min-w-0 flex-col text-start sm:flex">
+                      <span className="truncate text-xs font-medium text-ink-900">
+                        {t('nav.account')}
+                      </span>
+                      <span className="truncate text-[11px] text-ink-700" dir="ltr">
+                        {user.phone}
+                      </span>
+                    </span>
+                    <svg
+                      aria-hidden
+                      viewBox="0 0 20 20"
+                      className={`hidden h-3.5 w-3.5 text-ink-700 transition sm:block ${
+                        profileOpen ? 'rotate-180' : ''
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    >
+                      <path
+                        d="M5 7.5 10 12.5 15 7.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <GlassMenu
+                    open={profileOpen}
+                    onClose={() => setProfileOpen(false)}
+                    align="end"
+                    className="w-[15.5rem]"
+                  >
+                    <div className="border-b border-ink-900/8 px-3.5 py-3">
+                      <p className="text-xs text-ink-700">{t('nav.signedInAs')}</p>
+                      <p className="mt-0.5 truncate text-sm font-medium text-ink-900" dir="ltr">
+                        {user.phone}
+                      </p>
+                    </div>
+                    {isAdmin ? (
+                      <Link
+                        href="/admin"
+                        role="menuitem"
+                        className="glass-menu-item"
+                        onClick={() => setProfileOpen(false)}
+                      >
+                        {t('nav.admin')}
+                      </Link>
+                    ) : null}
                     <Link
-                      href="/admin"
+                      href="/cart"
                       role="menuitem"
                       className="glass-menu-item"
                       onClick={() => setProfileOpen(false)}
                     >
-                      {t('nav.admin')}
+                      {t('nav.cart')}
                     </Link>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="glass-menu-item text-red-800"
+                      onClick={() => void onLogout()}
+                    >
+                      {t('nav.logout')}
+                    </button>
+                  </GlassMenu>
+                </>
+              ) : (
+                <Link href="/login" className="profile-guest-btn">
+                  <span className="profile-avatar profile-avatar-guest" aria-hidden>
+                    <UserIcon />
+                  </span>
+                  <span className="hidden sm:inline">{t('nav.login')}</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {menuOpen ? (
+        <>
+          <button
+            type="button"
+            className="side-drawer-backdrop"
+            aria-label={t('nav.closeMenu')}
+            onClick={() => setMenuOpen(false)}
+          />
+          <aside
+            id="mobile-side-drawer"
+            className="side-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('nav.menu')}
+          >
+            <div className="flex items-center justify-between border-b border-ink-900/10 px-4 py-4">
+              <p className="brand-mark text-xl text-ink-900">{t('brand')}</p>
+              <button
+                type="button"
+                className="nav-icon-btn"
+                aria-label={t('nav.closeMenu')}
+                onClick={() => setMenuOpen(false)}
+              >
+                <MenuIcon open />
+              </button>
+            </div>
+
+            <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4">
+              <NavLink
+                href="/"
+                active={pathname === '/'}
+                variant="drawer"
+                onNavigate={() => setMenuOpen(false)}
+              >
+                {t('nav.home')}
+              </NavLink>
+              <NavLink
+                href="/shop"
+                active={pathname.startsWith('/shop')}
+                variant="drawer"
+                onNavigate={() => setMenuOpen(false)}
+              >
+                {t('nav.shop')}
+              </NavLink>
+              <NavLink
+                href="/cart"
+                active={pathname.startsWith('/cart')}
+                variant="drawer"
+                onNavigate={() => setMenuOpen(false)}
+              >
+                <span className="inline-flex items-center gap-2">
+                  {t('nav.cart')}
+                  {count > 0 ? <span className="nav-badge">{count}</span> : null}
+                </span>
+              </NavLink>
+
+              <div className="my-3 border-t border-ink-900/10" />
+
+              {!loading && user ? (
+                <>
+                  <div className="rounded-2xl bg-ink-900/5 px-3 py-3">
+                    <p className="text-xs text-ink-700">{t('nav.signedInAs')}</p>
+                    <p className="mt-0.5 text-sm font-medium text-ink-900" dir="ltr">
+                      {user.phone}
+                    </p>
+                  </div>
+                  {isAdmin ? (
+                    <NavLink
+                      href="/admin"
+                      active={pathname.startsWith('/admin')}
+                      variant="drawer"
+                      onNavigate={() => setMenuOpen(false)}
+                    >
+                      {t('nav.admin')}
+                    </NavLink>
                   ) : null}
-                  <Link
-                    href="/cart"
-                    role="menuitem"
-                    className="glass-menu-item"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    {t('nav.cart')}
-                  </Link>
                   <button
                     type="button"
-                    role="menuitem"
-                    className="glass-menu-item text-red-800"
+                    className="rounded-xl px-3 py-3 text-start text-base text-red-800 transition hover:bg-ink-900/5"
                     onClick={() => void onLogout()}
                   >
                     {t('nav.logout')}
                   </button>
-                </GlassMenu>
-              </>
-            ) : (
-              <Link href="/login" className="profile-guest-btn">
-                <span className="profile-avatar profile-avatar-guest" aria-hidden>
-                  <UserIcon />
-                </span>
-                <span className="hidden sm:inline">{t('nav.login')}</span>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {menuOpen ? (
-        <div className="border-t border-white/30 bg-white/70 backdrop-blur-xl lg:hidden">
-          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 sm:px-5">
-            {navLinks}
-            {!loading && user ? (
-              <>
-                {isAdmin ? (
-                  <NavLink
-                    href="/admin"
-                    active={pathname.startsWith('/admin')}
-                    onNavigate={() => setMenuOpen(false)}
-                  >
-                    {t('nav.admin')}
-                  </NavLink>
-                ) : null}
-                <button
-                  type="button"
-                  className="nav-mobile-link text-start text-red-800"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    void onLogout();
-                  }}
+                </>
+              ) : (
+                <NavLink
+                  href="/login"
+                  active={pathname.startsWith('/login')}
+                  variant="drawer"
+                  onNavigate={() => setMenuOpen(false)}
                 >
-                  {t('nav.logout')}
-                </button>
-              </>
-            ) : (
-              <NavLink
-                href="/login"
-                active={pathname.startsWith('/login')}
-                onNavigate={() => setMenuOpen(false)}
+                  {t('nav.login')}
+                </NavLink>
+              )}
+            </nav>
+
+            <div className="border-t border-ink-900/10 px-4 py-4">
+              <button
+                type="button"
+                className="btn-ghost w-full justify-between"
+                onClick={toggleTheme}
               >
-                {t('nav.login')}
-              </NavLink>
-            )}
-          </nav>
-        </div>
+                <span>{theme === 'dark' ? t('common.lightTheme') : t('common.darkTheme')}</span>
+                {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+              </button>
+            </div>
+          </aside>
+        </>
       ) : null}
-    </header>
+    </>
   );
 }
 
@@ -259,18 +346,25 @@ function NavLink({
   active,
   children,
   onNavigate,
+  variant,
 }: {
   href: string;
   active: boolean;
   children: React.ReactNode;
   onNavigate?: () => void;
+  variant: 'desktop' | 'drawer';
 }) {
+  const base =
+    variant === 'desktop'
+      ? 'inline-flex rounded-xl px-3 py-2 text-sm transition hover:bg-white/50'
+      : 'block w-full rounded-xl px-3 py-3 text-base transition hover:bg-ink-900/5';
+
   return (
     <Link
       href={href}
       onClick={onNavigate}
-      className={`nav-link block w-full rounded-xl px-3 py-3 text-base transition lg:inline-flex lg:w-auto lg:py-2 lg:text-sm lg:hover:bg-white/50 ${
-        active ? 'bg-white/70 font-medium text-ink-950 lg:bg-white/60' : 'hover:text-ink-950'
+      className={`${base} ${
+        active ? 'bg-white/60 font-medium text-ink-950' : 'text-ink-800 hover:text-ink-950'
       }`}
     >
       {children}
@@ -299,6 +393,27 @@ function UserIcon() {
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7">
       <circle cx="12" cy="8.5" r="3.2" />
       <path d="M5.5 19c1.4-3 3.7-4.5 6.5-4.5S17.1 16 18.5 19" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7">
+      <path
+        d="M20 13.5A7.5 7.5 0 1 1 10.5 4 6 6 0 0 0 20 13.5Z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19" strokeLinecap="round" />
     </svg>
   );
 }

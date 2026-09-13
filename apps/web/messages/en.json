@@ -10,7 +10,8 @@
     "account": "Account",
     "signedInAs": "Signed in as",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "menu": "Menu"
   },
   "home": {
     "headline": "Quiet luxury for everyday light.",
@@ -64,6 +65,8 @@
   "common": {
     "loading": "Loading…",
     "save": "Save",
-    "language": "Language"
+    "language": "Language",
+    "darkTheme": "Dark theme",
+    "lightTheme": "Light theme"
   }
 }

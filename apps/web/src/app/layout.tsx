@@ -4,8 +4,10 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { Cormorant_Garamond, Manrope, Vazirmatn } from 'next/font/google';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { ThemeScript } from '@/components/theme-script';
 import { CartProvider } from '@/lib/cart';
 import { AuthProvider } from '@/lib/auth';
+import { ThemeProvider } from '@/lib/theme';
 import { isRtl } from '@/i18n/config';
 import './globals.css';
 
@@ -38,21 +40,31 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const rtl = isRtl(locale);
 
   return (
-    <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} className={`${display.variable} ${sans.variable} ${fa.variable}`}>
+    <html
+      lang={locale}
+      dir={rtl ? 'rtl' : 'ltr'}
+      className={`${display.variable} ${sans.variable} ${fa.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <ThemeScript />
+      </head>
       <body className={`${rtl ? 'locale-fa font-fa' : 'font-sans'} antialiased`}>
         <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-            <CartProvider>
-              <div className="site-shell relative flex min-h-screen flex-col">
-                <div aria-hidden className="site-glow pointer-events-none absolute inset-0" />
-                <SiteHeader />
-                <main className="relative mx-auto w-full max-w-6xl flex-1 px-4 pb-12 pt-6 sm:px-5 sm:pb-16 sm:pt-8 md:pt-10">
-                  {children}
-                </main>
-                <SiteFooter />
-              </div>
-            </CartProvider>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <CartProvider>
+                <div className="site-shell relative flex min-h-screen flex-col">
+                  <div aria-hidden className="site-glow pointer-events-none absolute inset-0" />
+                  <SiteHeader />
+                  <main className="relative mx-auto w-full max-w-6xl flex-1 px-4 pb-12 pt-6 sm:px-5 sm:pb-16 sm:pt-8 md:pt-10">
+                    {children}
+                  </main>
+                  <SiteFooter />
+                </div>
+              </CartProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

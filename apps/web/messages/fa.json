@@ -10,7 +10,8 @@
     "account": "حساب کاربری",
     "signedInAs": "وارد شده با",
     "openMenu": "باز کردن منو",
-    "closeMenu": "بستن منو"
+    "closeMenu": "بستن منو",
+    "menu": "منو"
   },
   "home": {
     "headline": "لوکس آرام برای نور روزمره.",
@@ -64,6 +65,8 @@
   "common": {
     "loading": "در حال بارگذاری…",
     "save": "ذخیره",
-    "language": "زبان"
+    "language": "زبان",
+    "darkTheme": "تم تیره",
+    "lightTheme": "تم روشن"
   }
 }
