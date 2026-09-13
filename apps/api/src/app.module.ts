@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
+import { SettingsModule } from './settings/settings.module';
 import { validateEnv } from './config/env.validation';
 
 @Module({
@@ -33,6 +34,7 @@ import { validateEnv } from './config/env.validation';
     CatalogModule,
     OrdersModule,
     PaymentsModule,
+    SettingsModule,
   ],
   providers: [
     {
