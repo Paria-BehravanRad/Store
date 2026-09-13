@@ -56,10 +56,7 @@ export default async function HomePage() {
             {t('sub')}
           </p>
           <div className="mt-7 sm:mt-8">
-            <Link
-              href="/shop"
-              className="btn-primary bg-champagne-100 text-ink-900 shadow-glass hover:bg-white"
-            >
+            <Link href="/shop" className="btn-hero">
               {t('cta')}
             </Link>
           </div>
