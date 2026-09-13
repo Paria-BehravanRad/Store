@@ -6,7 +6,11 @@
     "cart": "Warenkorb",
     "login": "Anmelden",
     "admin": "Admin",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "account": "Konto",
+    "signedInAs": "Angemeldet als",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen"
   },
   "home": {
     "headline": "Ruhiger Luxus für den Alltag.",

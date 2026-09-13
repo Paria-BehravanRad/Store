@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { apiFetch, formatRials } from '@/lib/api';
+import { GlassSelect } from '@/components/glass-select';
 
 type Order = {
   id: string;
@@ -10,6 +11,16 @@ type Order = {
   totalRials: number;
   createdAt: string;
 };
+
+const STATUS_OPTIONS = [
+  'PENDING_PAYMENT',
+  'PAID',
+  'PROCESSING',
+  'SHIPPED',
+  'DELIVERED',
+  'CANCELLED',
+  'REFUNDED',
+].map((s) => ({ value: s, label: s }));
 
 export default function AdminOrdersPage() {
   const t = useTranslations('admin');
@@ -32,36 +43,29 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-3xl">{t('orders')}</h1>
+      <h1 className="section-title text-3xl">{t('orders')}</h1>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
       <ul className="space-y-2">
         {orders.map((order) => (
-          <li key={order.id} className="glass flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
-            <div>
-              <p className="font-medium">{order.id}</p>
+          <li
+            key={order.id}
+            className="glass flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div className="min-w-0">
+              <p className="truncate font-medium">{order.id}</p>
               <p className="text-xs text-ink-700">
-                {formatRials(order.totalRials, 'en')} IRR · {new Date(order.createdAt).toLocaleString()}
+                {formatRials(order.totalRials, 'en')} IRR ·{' '}
+                {new Date(order.createdAt).toLocaleString()}
               </p>
             </div>
-            <select
-              className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2 text-sm"
+            <GlassSelect
               value={order.status}
-              onChange={(e) => setStatus(order.id, e.target.value)}
-            >
-              {[
-                'PENDING_PAYMENT',
-                'PAID',
-                'PROCESSING',
-                'SHIPPED',
-                'DELIVERED',
-                'CANCELLED',
-                'REFUNDED',
-              ].map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+              options={STATUS_OPTIONS}
+              onChange={(status) => void setStatus(order.id, status)}
+              className="w-full sm:w-auto"
+              fullWidth
+              triggerClassName="sm:!w-auto"
+            />
           </li>
         ))}
       </ul>

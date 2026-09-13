@@ -50,13 +50,13 @@ export default async function ProductPage({
   );
 
   return (
-    <div className="grid items-start gap-10 lg:grid-cols-2">
-      <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-gradient-to-br from-champagne-100 via-white/55 to-ink-100/35 ring-1 ring-white/50" />
-      <div className="space-y-6 animate-fade-up">
+    <div className="grid items-start gap-8 sm:gap-10 lg:grid-cols-2">
+      <div className="aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-champagne-100 via-white/55 to-ink-100/35 ring-1 ring-white/50 sm:rounded-[2rem]" />
+      <div className="space-y-5 sm:space-y-6 animate-fade-up">
         <Link href="/shop" className="inline-block text-sm text-ink-700 hover:text-ink-950">
           ← {t('back')}
         </Link>
-        <h1 className="section-title text-4xl md:text-5xl">{name}</h1>
+        <h1 className="section-title text-3xl sm:text-4xl md:text-5xl">{name}</h1>
         <p className="text-lg text-ink-800">{formatRials(product.priceRials, locale)} IRR</p>
         <p className="text-sm text-ink-700">{ts('inStock', { count: product.stock })}</p>
         <div className="space-y-2 border-t border-ink-900/10 pt-5">

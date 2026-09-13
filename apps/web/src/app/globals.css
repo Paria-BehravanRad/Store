@@ -27,6 +27,12 @@ body {
   background-position: center;
 }
 
+@media (max-width: 640px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
 /* Persian: force Vazirmatn for body and display headings */
 .locale-fa,
 .locale-fa body,
@@ -72,11 +78,11 @@ html[lang='fa'] .brand-mark {
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-2xl bg-ink-900 px-5 py-2.5 text-sm font-medium text-champagne-50 transition duration-200 hover:bg-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-2xl bg-ink-900 px-4 py-2.5 text-sm font-medium text-champagne-50 transition duration-200 hover:bg-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 active:scale-[0.98] sm:px-5;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-2xl border border-ink-900/10 bg-white/40 px-5 py-2.5 text-sm font-medium text-ink-900 transition duration-200 hover:bg-white/70 active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-2xl border border-ink-900/10 bg-white/40 px-4 py-2.5 text-sm font-medium text-ink-900 transition duration-200 hover:bg-white/70 active:scale-[0.98] sm:px-5;
   }
 
   .field {
@@ -84,15 +90,83 @@ html[lang='fa'] .brand-mark {
   }
 
   .section-title {
-    @apply font-display text-3xl tracking-tight text-ink-900 md:text-4xl;
+    @apply font-display text-[1.75rem] tracking-tight text-ink-900 sm:text-3xl md:text-4xl;
   }
 
   .chip {
-    @apply rounded-full border border-ink-900/10 bg-white/45 px-3.5 py-1.5 text-xs font-medium text-ink-800 transition hover:bg-white/75;
+    @apply rounded-full border border-ink-900/10 bg-white/45 px-3 py-1.5 text-xs font-medium text-ink-800 transition hover:bg-white/75 sm:px-3.5;
   }
 
   .chip-active {
     @apply border-ink-900/20 bg-ink-900 text-champagne-50 hover:bg-ink-800;
+  }
+
+  .glass-select-trigger {
+    @apply inline-flex min-h-10 items-center justify-between gap-2 rounded-2xl border border-white/50 bg-white/55 px-3 py-2 text-sm text-ink-900 shadow-sm backdrop-blur-md transition hover:bg-white/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .glass-menu {
+    @apply absolute z-50 mt-2 overflow-hidden rounded-2xl border border-white/55 bg-white/80 p-1.5 shadow-glass backdrop-blur-xl animate-fade-up;
+  }
+
+  .glass-menu-item {
+    @apply flex w-full flex-col rounded-xl px-3 py-2.5 text-start text-sm text-ink-900 transition hover:bg-ink-900/5;
+  }
+
+  .glass-menu-item.is-active {
+    @apply bg-ink-900 text-champagne-50 hover:bg-ink-800;
+  }
+
+  .glass-menu-item.is-active .text-ink-700\/80 {
+    @apply text-champagne-100/80;
+  }
+
+  .nav-link {
+    @apply rounded-xl px-3 py-2 text-sm text-ink-800 transition;
+  }
+
+  .nav-desktop-link {
+    @apply hover:bg-white/50 hover:text-ink-950;
+  }
+
+  .nav-desktop-link.is-active {
+    @apply bg-white/60 font-medium text-ink-950;
+  }
+
+  .nav-mobile-link {
+    @apply block w-full px-3 py-3 text-base;
+  }
+
+  .nav-mobile-link.is-active {
+    @apply bg-white/70 font-medium text-ink-950;
+  }
+
+  .nav-badge {
+    @apply inline-flex min-w-5 items-center justify-center rounded-full bg-ink-900 px-1.5 py-0.5 text-[10px] leading-none text-white;
+  }
+
+  .nav-icon-btn {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/50 bg-white/50 text-ink-900 backdrop-blur-md transition hover:bg-white/75;
+  }
+
+  .profile-trigger {
+    @apply inline-flex max-w-[11rem] items-center gap-2 rounded-2xl border border-white/50 bg-white/55 py-1.5 pe-2.5 ps-1.5 text-ink-900 shadow-sm backdrop-blur-md transition hover:bg-white/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 sm:max-w-[14rem];
+  }
+
+  .profile-guest-btn {
+    @apply inline-flex items-center gap-2 rounded-2xl border border-ink-900/15 bg-ink-900 px-2 py-1.5 text-sm font-medium text-champagne-50 shadow-sm transition hover:bg-ink-800 sm:px-3;
+  }
+
+  .profile-avatar {
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-champagne-100 to-champagne-300 text-[11px] font-semibold text-ink-900;
+  }
+
+  .profile-avatar-guest {
+    @apply bg-white/15 text-champagne-50 from-transparent to-transparent;
+  }
+
+  .profile-skeleton {
+    @apply h-10 w-10 animate-pulse rounded-2xl bg-white/50 sm:w-28;
   }
 }
 

@@ -6,7 +6,11 @@
     "cart": "سبد خرید",
     "login": "ورود",
     "admin": "مدیریت",
-    "logout": "خروج"
+    "logout": "خروج",
+    "account": "حساب کاربری",
+    "signedInAs": "وارد شده با",
+    "openMenu": "باز کردن منو",
+    "closeMenu": "بستن منو"
   },
   "home": {
     "headline": "لوکس آرام برای نور روزمره.",

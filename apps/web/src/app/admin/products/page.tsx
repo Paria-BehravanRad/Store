@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { apiFetch, formatRials } from '@/lib/api';
+import { GlassSelect } from '@/components/glass-select';
 
 type Product = {
   id: string;
@@ -75,45 +76,43 @@ export default function AdminProductsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-3xl">{t('products')}</h1>
+      <h1 className="section-title text-3xl">{t('products')}</h1>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
-      <form onSubmit={onCreate} className="glass grid gap-3 rounded-3xl p-5 md:grid-cols-2">
-        <select
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
-          value={form.categoryId}
-          onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-          required
-        >
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nameEn}
-            </option>
-          ))}
-        </select>
+      <form
+        onSubmit={onCreate}
+        className="glass grid gap-3 rounded-[1.5rem] p-4 sm:rounded-3xl sm:p-5 md:grid-cols-2"
+      >
+        <GlassSelect
+          fullWidth
+          ariaLabel="Category"
+          value={form.categoryId || categories[0]?.id || ''}
+          options={categories.map((c) => ({ value: c.id, label: c.nameEn }))}
+          onChange={(categoryId) => setForm({ ...form, categoryId })}
+        />
         <input
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
+          className="field"
           placeholder="slug"
           value={form.slug}
           onChange={(e) => setForm({ ...form, slug: e.target.value })}
           required
         />
         <input
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
+          className="field"
           placeholder="nameEn"
           value={form.nameEn}
           onChange={(e) => setForm({ ...form, nameEn: e.target.value })}
           required
         />
         <input
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
+          className="field"
           placeholder="nameFa"
           value={form.nameFa}
           onChange={(e) => setForm({ ...form, nameFa: e.target.value })}
           required
         />
         <input
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
+          className="field"
           placeholder="nameDe"
           value={form.nameDe}
           onChange={(e) => setForm({ ...form, nameDe: e.target.value })}
@@ -121,14 +120,14 @@ export default function AdminProductsPage() {
         />
         <input
           type="number"
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
+          className="field"
           value={form.priceRials}
           onChange={(e) => setForm({ ...form, priceRials: Number(e.target.value) })}
           required
         />
         <input
           type="number"
-          className="rounded-xl border border-ink-900/10 bg-white/70 px-3 py-2"
+          className="field"
           value={form.stock}
           onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
           required
@@ -140,14 +139,17 @@ export default function AdminProductsPage() {
 
       <ul className="space-y-2">
         {products.map((p) => (
-          <li key={p.id} className="glass flex items-center justify-between rounded-2xl px-4 py-3">
-            <div>
+          <li
+            key={p.id}
+            className="glass flex flex-col gap-3 rounded-2xl px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div className="min-w-0">
               <p className="font-medium">{p.nameEn}</p>
-              <p className="text-xs text-ink-700">
+              <p className="truncate text-xs text-ink-700">
                 {p.slug} · {formatRials(p.priceRials, 'en')} IRR · stock {p.stock}
               </p>
             </div>
-            <button type="button" className="btn-ghost" onClick={() => remove(p.id)}>
+            <button type="button" className="btn-ghost shrink-0" onClick={() => remove(p.id)}>
               Delete
             </button>
           </li>

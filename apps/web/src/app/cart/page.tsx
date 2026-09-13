@@ -44,11 +44,11 @@ export default function CartPage() {
           </li>
         ))}
       </ul>
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <p className="text-lg font-medium">
           {t('total')}: {formatRials(totalRials, locale)} IRR
         </p>
-        <Link href="/checkout" className="btn-primary">
+        <Link href="/checkout" className="btn-primary w-full justify-center sm:w-auto">
           {t('checkout')}
         </Link>
       </div>

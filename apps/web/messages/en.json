@@ -6,7 +6,11 @@
     "cart": "Cart",
     "login": "Sign in",
     "admin": "Admin",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "account": "Account",
+    "signedInAs": "Signed in as",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "home": {
     "headline": "Quiet luxury for everyday light.",

@@ -4,6 +4,13 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { apiFetch } from '@/lib/api';
 import { locales, type AppLocale } from '@/i18n/config';
+import { GlassSelect } from '@/components/glass-select';
+
+const LOCALE_LABELS: Record<AppLocale, string> = {
+  en: 'English',
+  fa: 'فارسی',
+  de: 'Deutsch',
+};
 
 export default function AdminSettingsPage() {
   const t = useTranslations('admin');
@@ -38,34 +45,29 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg space-y-4">
-      <h1 className="font-display text-3xl">{t('settings')}</h1>
-      <form onSubmit={onSave} className="glass space-y-4 rounded-3xl p-6">
+    <div className="mx-auto w-full max-w-lg space-y-4">
+      <h1 className="section-title text-3xl">{t('settings')}</h1>
+      <form onSubmit={onSave} className="glass space-y-4 rounded-[1.5rem] p-5 sm:rounded-3xl sm:p-6">
         <label className="block space-y-2 text-sm">
           <span>Store name</span>
           <input
-            className="w-full rounded-2xl border border-ink-900/10 bg-white/70 px-4 py-3"
+            className="field"
             value={storeName}
             onChange={(e) => setStoreName(e.target.value)}
           />
         </label>
-        <label className="block space-y-2 text-sm">
-          <span>{t('defaultLocale')}</span>
-          <select
-            className="w-full rounded-2xl border border-ink-900/10 bg-white/70 px-4 py-3"
+        <div className="space-y-2 text-sm">
+          <span className="block">{t('defaultLocale')}</span>
+          <GlassSelect
+            fullWidth
             value={defaultLocale}
-            onChange={(e) => setDefaultLocale(e.target.value as AppLocale)}
-          >
-            {locales.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </label>
+            options={locales.map((l) => ({ value: l, label: LOCALE_LABELS[l] }))}
+            onChange={setDefaultLocale}
+          />
+        </div>
         {message ? <p className="text-sm text-emerald-800">{message}</p> : null}
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
-        <button className="btn-primary" type="submit">
+        <button className="btn-primary w-full sm:w-auto" type="submit">
           {tc('save')}
         </button>
       </form>

@@ -74,7 +74,7 @@ export default async function ShopPage({
       {products.length === 0 ? (
         <p className="glass rounded-[1.75rem] p-8 text-ink-700">{t('empty')}</p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {products.map((p) => (
             <Link
               key={p.id}

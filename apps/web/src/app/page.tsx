@@ -32,7 +32,7 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-20">
-      <section className="relative -mx-4 overflow-hidden md:mx-0 md:rounded-[2rem]">
+      <section className="relative -mx-4 overflow-hidden sm:mx-0 sm:rounded-[1.75rem] md:rounded-[2rem]">
         <div className="absolute inset-0">
           <Image
             src="/images/hero-atmosphere.jpg"
@@ -45,17 +45,17 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ink-950/75 via-ink-900/35 to-ink-900/15" />
         </div>
 
-        <div className="relative flex min-h-[78vh] flex-col justify-end px-6 pb-12 pt-28 md:px-12 md:pb-16 animate-fade-up">
-          <p className="brand-mark text-5xl leading-none text-champagne-50 md:text-7xl">
+        <div className="relative flex min-h-[70vh] flex-col justify-end px-5 pb-10 pt-24 sm:min-h-[74vh] sm:px-8 sm:pb-12 md:min-h-[78vh] md:px-12 md:pb-16 animate-fade-up">
+          <p className="brand-mark text-4xl leading-none text-champagne-50 sm:text-5xl md:text-7xl">
             ViraPlaza
           </p>
-          <h1 className="mt-5 max-w-xl text-balance text-2xl font-medium leading-snug text-white md:text-3xl">
+          <h1 className="mt-4 max-w-xl text-balance text-xl font-medium leading-snug text-white sm:mt-5 sm:text-2xl md:text-3xl">
             {t('headline')}
           </h1>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-white/85 md:text-base">
             {t('sub')}
           </p>
-          <div className="mt-8">
+          <div className="mt-7 sm:mt-8">
             <Link
               href="/shop"
               className="btn-primary bg-champagne-100 text-ink-900 shadow-glass hover:bg-white"
@@ -66,15 +66,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="space-y-7 animate-fade-up" style={{ animationDelay: '140ms' }}>
-        <div className="flex items-end justify-between gap-4">
+      <section className="space-y-6 sm:space-y-7 animate-fade-up" style={{ animationDelay: '140ms' }}>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <h2 className="section-title">{t('featured')}</h2>
           <Link href="/shop" className="text-sm text-ink-700 underline-offset-4 hover:underline">
             {t('cta')}
           </Link>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {products.map((p) => (
             <Link
               key={p.id}

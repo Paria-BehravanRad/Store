@@ -43,10 +43,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             <CartProvider>
-              <div className="site-shell relative min-h-screen">
+              <div className="site-shell relative flex min-h-screen flex-col">
                 <div aria-hidden className="site-glow pointer-events-none absolute inset-0" />
                 <SiteHeader />
-                <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-8 md:pt-10">
+                <main className="relative mx-auto w-full max-w-6xl flex-1 px-4 pb-12 pt-6 sm:px-5 sm:pb-16 sm:pt-8 md:pt-10">
                   {children}
                 </main>
                 <SiteFooter />
