@@ -26,24 +26,46 @@ export function SiteHeader() {
   const { user, isAdmin, loading, logout, refresh } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuMounted, setMenuMounted] = useState(false);
+  const [menuClosing, setMenuClosing] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  function openMenu() {
+    setMenuClosing(false);
+    setMenuMounted(true);
+    setMenuOpen(true);
+  }
+
+  function closeMenu() {
+    if (!menuMounted || menuClosing) return;
+    setMenuOpen(false);
+    setMenuClosing(true);
+  }
+
+  function onMenuExitEnd() {
+    if (!menuClosing) return;
+    setMenuMounted(false);
+    setMenuClosing(false);
+  }
 
   useEffect(() => {
     setMenuOpen(false);
+    setMenuClosing(false);
+    setMenuMounted(false);
     setProfileOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    document.body.style.overflow = menuMounted ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
-  }, [menuOpen]);
+  }, [menuMounted]);
 
   useEffect(() => {
     if (!menuOpen) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setMenuOpen(false);
+      if (e.key === 'Escape') closeMenu();
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -65,7 +87,7 @@ export function SiteHeader() {
 
   async function onLogout() {
     setProfileOpen(false);
-    setMenuOpen(false);
+    closeMenu();
     await logout();
     router.push('/');
     router.refresh();
@@ -104,7 +126,7 @@ export function SiteHeader() {
               aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
               aria-expanded={menuOpen}
               aria-controls="mobile-side-drawer"
-              onClick={() => setMenuOpen(true)}
+              onClick={openMenu}
             >
               <MenuIcon open={false} />
             </button>
@@ -232,20 +254,24 @@ export function SiteHeader() {
         </div>
       </header>
 
-      {menuOpen ? (
+      {menuMounted ? (
         <>
           <button
             type="button"
-            className="side-drawer-backdrop"
+            className={`side-drawer-backdrop ${menuClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`}
             aria-label={t('nav.closeMenu')}
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
           />
           <aside
             id="mobile-side-drawer"
-            className="side-drawer"
+            className={`side-drawer ${menuClosing ? 'animate-drawer-out' : 'animate-drawer-in'}`}
             role="dialog"
             aria-modal="true"
             aria-label={t('nav.menu')}
+            onAnimationEnd={(e) => {
+              if (e.target !== e.currentTarget) return;
+              onMenuExitEnd();
+            }}
           >
             <div className="flex items-center justify-between border-b border-ink-900/10 px-4 py-4">
               <p className="brand-mark text-xl text-ink-900">{t('brand')}</p>
@@ -253,7 +279,7 @@ export function SiteHeader() {
                 type="button"
                 className="nav-icon-btn"
                 aria-label={t('nav.closeMenu')}
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenu}
               >
                 <MenuIcon open />
               </button>
@@ -264,7 +290,7 @@ export function SiteHeader() {
                 href="/"
                 active={pathname === '/'}
                 variant="drawer"
-                onNavigate={() => setMenuOpen(false)}
+                onNavigate={closeMenu}
               >
                 {t('nav.home')}
               </NavLink>
@@ -272,7 +298,7 @@ export function SiteHeader() {
                 href="/shop"
                 active={pathname.startsWith('/shop')}
                 variant="drawer"
-                onNavigate={() => setMenuOpen(false)}
+                onNavigate={closeMenu}
               >
                 {t('nav.shop')}
               </NavLink>
@@ -280,7 +306,7 @@ export function SiteHeader() {
                 href="/cart"
                 active={pathname.startsWith('/cart')}
                 variant="drawer"
-                onNavigate={() => setMenuOpen(false)}
+                onNavigate={closeMenu}
               >
                 <span className="inline-flex items-center gap-2">
                   {t('nav.cart')}
@@ -292,7 +318,7 @@ export function SiteHeader() {
                   href="/admin"
                   active={pathname.startsWith('/admin')}
                   variant="drawer"
-                  onNavigate={() => setMenuOpen(false)}
+                  onNavigate={closeMenu}
                 >
                   {t('nav.admin')}
                 </NavLink>
@@ -304,6 +330,7 @@ export function SiteHeader() {
                 <p className="px-0.5 text-xs font-medium text-ink-700">{t('common.language')}</p>
                 <GlassSelect
                   fullWidth
+                  placement="top"
                   ariaLabel={t('common.language')}
                   value={locale}
                   options={languageOptions}

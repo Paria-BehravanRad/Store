@@ -246,10 +246,16 @@ html.dark .site-glow {
   }
 
   .glass-menu {
-    @apply absolute z-50 mt-2 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border p-1.5 backdrop-blur-xl animate-fade-up;
+    @apply absolute z-50 mt-2 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border p-1.5 backdrop-blur-xl animate-menu-in;
     border-color: var(--vp-glass-border);
     background: color-mix(in srgb, var(--vp-drawer) 92%, transparent);
     box-shadow: 0 12px 40px rgba(28, 25, 23, 0.14);
+    transform-origin: top center;
+  }
+
+  .glass-menu.glass-menu-up {
+    @apply bottom-full mb-2 mt-0;
+    transform-origin: bottom center;
   }
 
   html.dark .glass-menu {
@@ -359,16 +365,17 @@ html.dark .site-glow {
   }
 
   .side-drawer-backdrop {
-    @apply fixed inset-0 z-[60] lg:hidden animate-backdrop-in;
+    @apply fixed inset-0 z-[60] lg:hidden;
     background: var(--vp-overlay);
     backdrop-filter: blur(2px);
   }
 
   .side-drawer {
-    @apply fixed inset-y-0 z-[70] flex w-[min(20rem,86vw)] flex-col border shadow-glass backdrop-blur-xl lg:hidden animate-drawer-in;
+    @apply fixed inset-y-0 z-[70] flex w-[min(20rem,86vw)] flex-col border shadow-glass backdrop-blur-xl lg:hidden;
     inset-inline-start: 0;
     border-color: var(--vp-glass-border);
     background: var(--vp-drawer);
+    will-change: transform, opacity;
   }
 
   html.dark .side-drawer {

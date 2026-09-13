@@ -25,6 +25,8 @@ type GlassSelectProps<T extends string = string> = {
   className?: string;
   triggerClassName?: string;
   align?: 'start' | 'end';
+  /** Prefer opening upward (e.g. footer controls). Auto still flips if space is tight. */
+  placement?: 'bottom' | 'top' | 'auto';
   fullWidth?: boolean;
   disabled?: boolean;
 };
@@ -39,10 +41,14 @@ export function GlassSelect<T extends string = string>({
   className = '',
   triggerClassName = '',
   align = 'start',
+  placement = 'auto',
   fullWidth = false,
   disabled = false,
 }: GlassSelectProps<T>) {
   const [open, setOpen] = useState(false);
+  const [menuSide, setMenuSide] = useState<'bottom' | 'top'>(
+    placement === 'top' ? 'top' : 'bottom',
+  );
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const selected = options.find((o) => o.value === value);
@@ -63,6 +69,21 @@ export function GlassSelect<T extends string = string>({
       document.removeEventListener('keydown', onKey);
     };
   }, []);
+
+  useEffect(() => {
+    if (!open || !rootRef.current) return;
+    if (placement === 'top' || placement === 'bottom') {
+      setMenuSide(placement);
+      return;
+    }
+    const rect = rootRef.current.getBoundingClientRect();
+    const estimatedMenuHeight = Math.min(options.length * 52 + 20, 280);
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    setMenuSide(
+      spaceBelow < estimatedMenuHeight && spaceAbove > spaceBelow ? 'top' : 'bottom',
+    );
+  }, [open, options.length, placement]);
 
   function onTriggerKey(e: KeyboardEvent<HTMLButtonElement>) {
     if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
@@ -100,7 +121,9 @@ export function GlassSelect<T extends string = string>({
         <ul
           id={listId}
           role="listbox"
-          className={`glass-menu ${align === 'end' ? 'end-0' : 'start-0'} ${
+          className={`glass-menu ${menuSide === 'top' ? 'glass-menu-up' : ''} ${
+            align === 'end' ? 'end-0' : 'start-0'
+          } ${
             fullWidth ? 'w-full' : 'min-w-[12rem] w-max max-w-[min(20rem,calc(100vw-2rem))]'
           }`}
         >
