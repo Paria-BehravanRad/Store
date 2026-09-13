@@ -14,7 +14,8 @@
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:migrate": "pnpm --filter @viraplaza/api prisma:migrate",
-    "db:seed": "pnpm --filter @viraplaza/api prisma:seed"
+    "db:seed": "pnpm --filter @viraplaza/api prisma:seed",
+    "smoke": "bash scripts/smoke.sh"
   },
   "devDependencies": {
     "prettier": "^3.4.2",

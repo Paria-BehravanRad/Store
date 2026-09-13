@@ -10,6 +10,7 @@ type InitiateResponse = {
   redirectUrl: string;
   method: 'GET' | 'POST';
   token: string;
+  resNum: string;
   fields?: Record<string, string>;
 };
 
@@ -51,36 +52,19 @@ export default function CheckoutPage() {
       clear();
 
       if (payment.method === 'GET') {
-        // Mock gateway: complete via callback simulation
-        await apiFetch('/payments/sep/callback', {
-          method: 'POST',
-          body: JSON.stringify({
-            ResNum: payment.token.includes('mock') ? undefined : undefined,
-            State: 'OK',
-            RefNum: `MOCK-${order.id}`,
-            Token: payment.token,
-          }),
-        }).catch(() => null);
-
-        // For mock, call callback with ResNum from initiate by re-fetching isn't available;
-        // redirect to result and trigger mock verify through a dedicated client path.
-        const resNumMatch = payment.redirectUrl.match(/ResNum=([^&]+)/);
-        const resNum = resNumMatch ? decodeURIComponent(resNumMatch[1]) : '';
-        if (resNum) {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}/api/payments/sep/callback`,
-            {
-              method: 'POST',
-              headers: { 'content-type': 'application/json' },
-              body: JSON.stringify({
-                ResNum: resNum,
-                State: 'OK',
-                RefNum: `MOCK-${order.id}`,
-              }),
-              redirect: 'manual',
-            },
-          );
-        }
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}/api/payments/sep/callback`,
+          {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              ResNum: payment.resNum,
+              State: 'OK',
+              RefNum: `MOCK-${order.id}`,
+            }),
+            redirect: 'manual',
+          },
+        );
         router.push(`/checkout/result?orderId=${order.id}&status=paid`);
         return;
       }
