@@ -1,0 +1,62 @@
+{
+  "brand": "ViraPlaza",
+  "nav": {
+    "home": "Start",
+    "shop": "Shop",
+    "cart": "Warenkorb",
+    "login": "Anmelden",
+    "admin": "Admin",
+    "logout": "Abmelden"
+  },
+  "home": {
+    "headline": "Ruhiger Luxus für den Alltag.",
+    "sub": "Armbänder und Ringe mit weichem Glasfinish.",
+    "cta": "Kollektion entdecken",
+    "featured": "Ausgewählte Stücke"
+  },
+  "shop": {
+    "title": "Shop",
+    "empty": "Keine Produkte gefunden.",
+    "addToCart": "In den Warenkorb",
+    "inStock": "{count} auf Lager"
+  },
+  "product": {
+    "back": "Zurück zum Shop",
+    "description": "Details"
+  },
+  "cart": {
+    "title": "Ihr Warenkorb",
+    "empty": "Ihr Warenkorb ist leer.",
+    "checkout": "Zur Kasse",
+    "total": "Summe",
+    "remove": "Entfernen"
+  },
+  "auth": {
+    "title": "Mit OTP anmelden",
+    "phone": "Handynummer",
+    "code": "Bestätigungscode",
+    "send": "Code senden",
+    "verify": "Prüfen & fortfahren",
+    "hint": "Iranische Mobilnummer beginnend mit 09."
+  },
+  "checkout": {
+    "title": "Kasse",
+    "pay": "Mit SEP bezahlen",
+    "address": "Lieferadresse",
+    "success": "Zahlung erfolgreich",
+    "failed": "Zahlung fehlgeschlagen"
+  },
+  "admin": {
+    "title": "Admin",
+    "users": "Benutzer",
+    "products": "Produkte",
+    "orders": "Bestellungen",
+    "settings": "Einstellungen",
+    "defaultLocale": "Standardsprache"
+  },
+  "common": {
+    "loading": "Laden…",
+    "save": "Speichern",
+    "language": "Sprache"
+  }
+}

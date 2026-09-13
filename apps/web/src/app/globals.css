@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --vp-bg-0: #f7f2ea;
+  --vp-bg-1: #efe6d8;
+  --vp-ink: #1c1917;
+  --vp-accent: #8a6230;
+  --vp-glass: rgba(255, 255, 255, 0.55);
+  --vp-glass-border: rgba(255, 255, 255, 0.45);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--vp-ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(212, 180, 131, 0.35), transparent 60%),
+    radial-gradient(900px 500px at 90% 0%, rgba(120, 113, 108, 0.18), transparent 55%),
+    linear-gradient(180deg, var(--vp-bg-0), var(--vp-bg-1) 40%, #e8dfd0);
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/40 bg-white/50 shadow-glass backdrop-blur-glass;
+  }
+
+  .glass-strong {
+    @apply border border-white/50 bg-white/70 shadow-glass backdrop-blur-xl;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-2xl bg-ink-900 px-5 py-2.5 text-sm font-medium text-champagne-50 transition hover:bg-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-2xl border border-ink-900/10 bg-white/40 px-5 py-2.5 text-sm font-medium text-ink-900 transition hover:bg-white/70;
+  }
+}

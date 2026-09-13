@@ -3,9 +3,28 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "echo \"Web scaffold placeholder — Next.js lands in later commit\"",
-    "build": "echo \"Web scaffold placeholder\"",
-    "lint": "echo \"Web scaffold placeholder\"",
-    "test": "echo \"Web scaffold placeholder\""
+    "dev": "next dev --turbopack --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "lint": "next lint",
+    "test": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "@viraplaza/shared": "workspace:^",
+    "next": "^15.5.4",
+    "next-intl": "^4.14.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^15.5.4",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2"
   }
 }
