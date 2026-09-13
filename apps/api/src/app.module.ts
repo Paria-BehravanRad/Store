@@ -8,6 +8,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CatalogModule } from './catalog/catalog.module';
+import { OrdersModule } from './orders/orders.module';
 import { validateEnv } from './config/env.validation';
 
 @Module({
@@ -29,6 +30,7 @@ import { validateEnv } from './config/env.validation';
     AuthModule,
     UsersModule,
     CatalogModule,
+    OrdersModule,
   ],
   providers: [
     {
