@@ -12,9 +12,9 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="glass space-y-4 rounded-3xl p-8">
-        <h1 className="font-display text-3xl">{t('title')}</h1>
-        <p>{t('empty')}</p>
+      <div className="mx-auto max-w-lg space-y-5 text-center">
+        <h1 className="section-title">{t('title')}</h1>
+        <p className="text-ink-700">{t('empty')}</p>
         <Link href="/shop" className="btn-primary">
           Shop
         </Link>
@@ -23,14 +23,11 @@ export default function CartPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="font-display text-4xl">{t('title')}</h1>
-      <ul className="space-y-3">
+    <div className="mx-auto max-w-2xl space-y-7">
+      <h1 className="section-title">{t('title')}</h1>
+      <ul className="divide-y divide-ink-900/10 border-y border-ink-900/10">
         {items.map((item) => (
-          <li
-            key={item.productId}
-            className="glass flex items-center justify-between gap-4 rounded-2xl p-4"
-          >
+          <li key={item.productId} className="flex items-center justify-between gap-4 py-4">
             <div>
               <p className="font-medium">{item.name}</p>
               <p className="text-sm text-ink-700">
@@ -39,7 +36,7 @@ export default function CartPage() {
             </div>
             <button
               type="button"
-              className="btn-ghost"
+              className="text-sm text-ink-700 underline-offset-4 hover:underline"
               onClick={() => removeItem(item.productId)}
             >
               {t('remove')}
@@ -47,7 +44,7 @@ export default function CartPage() {
           </li>
         ))}
       </ul>
-      <div className="glass-strong flex items-center justify-between rounded-3xl p-5">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-lg font-medium">
           {t('total')}: {formatRials(totalRials, locale)} IRR
         </p>

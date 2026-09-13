@@ -31,6 +31,7 @@ export default async function ProductPage({
 }) {
   const { slug } = await params;
   const t = await getTranslations('product');
+  const ts = await getTranslations('shop');
   const locale = await getLocale();
 
   let product: Product;
@@ -49,21 +50,18 @@ export default async function ProductPage({
   );
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
-      <div className="glass aspect-[4/5] rounded-[2rem] bg-gradient-to-br from-champagne-100 via-white/50 to-ink-100/40" />
+    <div className="grid items-start gap-10 lg:grid-cols-2">
+      <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-gradient-to-br from-champagne-100 via-white/55 to-ink-100/35 ring-1 ring-white/50" />
       <div className="space-y-6 animate-fade-up">
-        <Link href="/shop" className="text-sm text-ink-700 hover:text-ink-950">
+        <Link href="/shop" className="inline-block text-sm text-ink-700 hover:text-ink-950">
           ← {t('back')}
         </Link>
-        <h1 className="font-display text-4xl text-ink-900 md:text-5xl">{name}</h1>
-        <p className="text-lg text-ink-800">
-          {formatRials(product.priceRials, locale)} IRR
-        </p>
-        <div className="glass-strong rounded-3xl p-5">
-          <h2 className="mb-2 text-sm font-medium uppercase tracking-wide text-ink-700">
-            {t('description')}
-          </h2>
-          <p className="text-ink-800">{description || '—'}</p>
+        <h1 className="section-title text-4xl md:text-5xl">{name}</h1>
+        <p className="text-lg text-ink-800">{formatRials(product.priceRials, locale)} IRR</p>
+        <p className="text-sm text-ink-700">{ts('inStock', { count: product.stock })}</p>
+        <div className="space-y-2 border-t border-ink-900/10 pt-5">
+          <h2 className="text-sm font-medium text-ink-700">{t('description')}</h2>
+          <p className="leading-relaxed text-ink-800">{description || '—'}</p>
         </div>
         <AddToCartButton
           productId={product.id}

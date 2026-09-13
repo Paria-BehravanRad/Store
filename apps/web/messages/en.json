@@ -18,7 +18,10 @@
     "title": "Shop",
     "empty": "No products found.",
     "addToCart": "Add to cart",
-    "inStock": "{count} in stock"
+    "inStock": "{count} in stock",
+    "all": "All",
+    "bracelets": "Bracelets",
+    "rings": "Rings"
   },
   "product": {
     "back": "Back to shop",

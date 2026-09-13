@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { apiFetch, formatRials } from '@/lib/api';
-import { getLocale } from 'next-intl/server';
 
 type Product = {
   id: string;
@@ -31,41 +31,59 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="space-y-16">
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/40">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              'linear-gradient(120deg, rgba(28,25,23,0.55), rgba(28,25,23,0.25)), url(/images/hero-accessories.svg)',
-          }}
-        />
-        <div className="relative flex min-h-[72vh] flex-col justify-end p-8 md:p-14 animate-fade-up">
-          <p className="font-display text-5xl leading-none text-champagne-50 md:text-7xl">
+    <div className="space-y-20">
+      <section className="relative -mx-4 overflow-hidden md:mx-0 md:rounded-[2rem]">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-atmosphere.jpg"
+            alt=""
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/75 via-ink-900/35 to-ink-900/15" />
+        </div>
+
+        <div className="relative flex min-h-[78vh] flex-col justify-end px-6 pb-12 pt-28 md:px-12 md:pb-16 animate-fade-up">
+          <p className="brand-mark text-5xl leading-none text-champagne-50 md:text-7xl">
             ViraPlaza
           </p>
-          <h1 className="mt-4 max-w-xl font-display text-3xl text-white md:text-4xl">
+          <h1 className="mt-5 max-w-xl text-balance text-2xl font-medium leading-snug text-white md:text-3xl">
             {t('headline')}
           </h1>
-          <p className="mt-3 max-w-lg text-sm text-white/85 md:text-base">{t('sub')}</p>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-white/85 md:text-base">
+            {t('sub')}
+          </p>
           <div className="mt-8">
-            <Link href="/shop" className="btn-primary bg-champagne-100 text-ink-900 hover:bg-white">
+            <Link
+              href="/shop"
+              className="btn-primary bg-champagne-100 text-ink-900 shadow-glass hover:bg-white"
+            >
               {t('cta')}
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="space-y-6 animate-fade-up" style={{ animationDelay: '120ms' }}>
-        <h2 className="font-display text-3xl text-ink-900">{t('featured')}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="space-y-7 animate-fade-up" style={{ animationDelay: '140ms' }}>
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="section-title">{t('featured')}</h2>
+          <Link href="/shop" className="text-sm text-ink-700 underline-offset-4 hover:underline">
+            {t('cta')}
+          </Link>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (
             <Link
               key={p.id}
               href={`/shop/${p.slug}`}
-              className="group overflow-hidden rounded-3xl border border-white/40 bg-white/40 p-3 backdrop-blur-glass transition hover:-translate-y-0.5 hover:bg-white/60"
+              className="group block overflow-hidden rounded-[1.5rem] transition duration-300 hover:-translate-y-1"
             >
-              <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-champagne-100 to-ink-100/40" />
+              <div className="aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-champagne-100 via-white/50 to-ink-100/40 ring-1 ring-white/50 transition duration-500 group-hover:shadow-glass">
+                <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.65),transparent_55%)]" />
+              </div>
               <div className="mt-3 space-y-1 px-1">
                 <p className="font-medium text-ink-900">{localizedName(p, locale)}</p>
                 <p className="text-sm text-ink-700">

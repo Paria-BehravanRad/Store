@@ -18,7 +18,10 @@
     "title": "فروشگاه",
     "empty": "محصولی یافت نشد.",
     "addToCart": "افزودن به سبد",
-    "inStock": "{count} عدد موجود"
+    "inStock": "{count} عدد موجود",
+    "all": "همه",
+    "bracelets": "دستبند",
+    "rings": "انگشتر"
   },
   "product": {
     "back": "بازگشت به فروشگاه",

@@ -1,12 +1,18 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
-
 export type ApiError = { message: string; status: number };
+
+/** Prefer same-origin `/api` proxy so auth cookies attach to the web app host. */
+function apiBase() {
+  if (typeof window !== 'undefined') {
+    return '';
+  }
+  return process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+}
 
 export async function apiFetch<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
-  const res = await fetch(`${API_URL}/api${path}`, {
+  const res = await fetch(`${apiBase()}/api${path}`, {
     ...init,
     credentials: 'include',
     headers: {

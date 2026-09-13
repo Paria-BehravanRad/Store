@@ -3,7 +3,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Cormorant_Garamond, Manrope, Vazirmatn } from 'next/font/google';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { CartProvider } from '@/lib/cart';
+import { AuthProvider } from '@/lib/auth';
 import { isRtl } from '@/i18n/config';
 import './globals.css';
 
@@ -20,7 +22,9 @@ const sans = Manrope({
 
 const fa = Vazirmatn({
   subsets: ['arabic'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-fa',
+  display: 'swap',
 });
 
 export const metadata = {
@@ -34,23 +38,21 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const rtl = isRtl(locale);
 
   return (
-    <html lang={locale} dir={rtl ? 'rtl' : 'ltr'}>
-      <body
-        className={`${display.variable} ${sans.variable} ${fa.variable} ${
-          rtl ? 'font-fa' : 'font-sans'
-        } antialiased`}
-      >
+    <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} className={`${display.variable} ${sans.variable} ${fa.variable}`}>
+      <body className={`${rtl ? 'locale-fa font-fa' : 'font-sans'} antialiased`}>
         <NextIntlClientProvider messages={messages}>
-          <CartProvider>
-            <div className="relative min-h-screen overflow-hidden">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 top-0 h-[70vh] bg-[linear-gradient(110deg,transparent_20%,rgba(255,255,255,0.35)_45%,transparent_70%)] bg-[length:200%_100%] animate-shimmer"
-              />
-              <SiteHeader />
-              <main className="relative mx-auto max-w-6xl px-4 py-8">{children}</main>
-            </div>
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <div className="site-shell relative min-h-screen">
+                <div aria-hidden className="site-glow pointer-events-none absolute inset-0" />
+                <SiteHeader />
+                <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-8 md:pt-10">
+                  {children}
+                </main>
+                <SiteFooter />
+              </div>
+            </CartProvider>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

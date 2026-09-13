@@ -52,19 +52,17 @@ export default function CheckoutPage() {
       clear();
 
       if (payment.method === 'GET') {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}/api/payments/sep/callback`,
-          {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-              ResNum: payment.resNum,
-              State: 'OK',
-              RefNum: `MOCK-${order.id}`,
-            }),
-            redirect: 'manual',
-          },
-        );
+        await fetch(`/api/payments/sep/callback`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            ResNum: payment.resNum,
+            State: 'OK',
+            RefNum: `MOCK-${order.id}`,
+          }),
+          redirect: 'manual',
+        });
         router.push(`/checkout/result?orderId=${order.id}&status=paid`);
         return;
       }

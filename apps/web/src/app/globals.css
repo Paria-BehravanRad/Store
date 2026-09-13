@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --vp-bg-0: #f7f2ea;
-  --vp-bg-1: #efe6d8;
+  --vp-bg-0: #f6f1e8;
+  --vp-bg-1: #ebe2d3;
   --vp-ink: #1c1917;
   --vp-accent: #8a6230;
-  --vp-glass: rgba(255, 255, 255, 0.55);
-  --vp-glass-border: rgba(255, 255, 255, 0.45);
+  --vp-glass: rgba(255, 255, 255, 0.52);
+  --vp-glass-border: rgba(255, 255, 255, 0.42);
 }
 
 html {
@@ -17,11 +17,49 @@ html {
 
 body {
   color: var(--vp-ink);
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(212, 180, 131, 0.35), transparent 60%),
-    radial-gradient(900px 500px at 90% 0%, rgba(120, 113, 108, 0.18), transparent 55%),
-    linear-gradient(180deg, var(--vp-bg-0), var(--vp-bg-1) 40%, #e8dfd0);
   min-height: 100vh;
+  background-color: var(--vp-bg-0);
+  background-image:
+    linear-gradient(180deg, rgba(246, 241, 232, 0.82), rgba(235, 226, 211, 0.9)),
+    url('/images/ambient-backdrop.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+/* Persian: force Vazirmatn for body and display headings */
+.locale-fa,
+.locale-fa body,
+html[lang='fa'] body {
+  font-family: var(--font-fa), Tahoma, sans-serif !important;
+}
+
+.locale-fa .font-display,
+.locale-fa .brand-mark,
+html[lang='fa'] .font-display,
+html[lang='fa'] .brand-mark {
+  font-family: var(--font-fa), Tahoma, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+.brand-mark {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+}
+
+.site-glow {
+  background:
+    radial-gradient(900px 420px at 12% -8%, rgba(212, 180, 131, 0.28), transparent 60%),
+    radial-gradient(700px 360px at 88% 0%, rgba(255, 255, 255, 0.35), transparent 55%),
+    linear-gradient(
+      110deg,
+      transparent 18%,
+      rgba(255, 255, 255, 0.22) 48%,
+      transparent 72%
+    );
+  background-size: auto, auto, 220% 100%;
+  animation: shimmer 10s linear infinite;
+  opacity: 0.9;
 }
 
 @layer components {
@@ -34,10 +72,41 @@ body {
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-2xl bg-ink-900 px-5 py-2.5 text-sm font-medium text-champagne-50 transition hover:bg-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500;
+    @apply inline-flex items-center justify-center rounded-2xl bg-ink-900 px-5 py-2.5 text-sm font-medium text-champagne-50 transition duration-200 hover:bg-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 active:scale-[0.98];
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-2xl border border-ink-900/10 bg-white/40 px-5 py-2.5 text-sm font-medium text-ink-900 transition hover:bg-white/70;
+    @apply inline-flex items-center justify-center rounded-2xl border border-ink-900/10 bg-white/40 px-5 py-2.5 text-sm font-medium text-ink-900 transition duration-200 hover:bg-white/70 active:scale-[0.98];
+  }
+
+  .field {
+    @apply w-full rounded-2xl border border-ink-900/10 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-champagne-500 focus:bg-white/90;
+  }
+
+  .section-title {
+    @apply font-display text-3xl tracking-tight text-ink-900 md:text-4xl;
+  }
+
+  .chip {
+    @apply rounded-full border border-ink-900/10 bg-white/45 px-3.5 py-1.5 text-xs font-medium text-ink-800 transition hover:bg-white/75;
+  }
+
+  .chip-active {
+    @apply border-ink-900/20 bg-ink-900 text-champagne-50 hover:bg-ink-800;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position:
+      0 0,
+      0 0,
+      200% 0;
+  }
+  100% {
+    background-position:
+      0 0,
+      0 0,
+      -200% 0;
   }
 }

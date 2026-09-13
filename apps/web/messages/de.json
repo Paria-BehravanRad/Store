@@ -18,7 +18,10 @@
     "title": "Shop",
     "empty": "Keine Produkte gefunden.",
     "addToCart": "In den Warenkorb",
-    "inStock": "{count} auf Lager"
+    "inStock": "{count} auf Lager",
+    "all": "Alle",
+    "bracelets": "Armbänder",
+    "rings": "Ringe"
   },
   "product": {
     "back": "Zurück zum Shop",
