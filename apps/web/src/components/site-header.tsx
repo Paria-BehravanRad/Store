@@ -51,6 +51,9 @@ export function SiteHeader() {
           <Link className={linkClass(pathname.startsWith('/login'))} href="/login">
             {t('nav.login')}
           </Link>
+          <Link className={linkClass(pathname.startsWith('/admin'))} href="/admin">
+            {t('nav.admin')}
+          </Link>
           <label className="sr-only" htmlFor="lang">
             {t('common.language')}
           </label>
