@@ -31,7 +31,7 @@ export default function CartPage() {
             <div>
               <p className="font-medium">{item.name}</p>
               <p className="text-sm text-ink-700">
-                ×{item.quantity} · {formatRials(item.priceRials * item.quantity, locale)} IRR
+                ×{item.quantity} · {formatRials(item.priceRials * item.quantity, locale)}
               </p>
             </div>
             <button
@@ -46,7 +46,7 @@ export default function CartPage() {
       </ul>
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <p className="text-lg font-medium">
-          {t('total')}: {formatRials(totalRials, locale)} IRR
+          {t('total')}: {formatRials(totalRials, locale)}
         </p>
         <Link href="/checkout" className="btn-primary w-full justify-center sm:w-auto">
           {t('checkout')}

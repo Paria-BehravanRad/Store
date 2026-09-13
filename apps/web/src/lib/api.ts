@@ -36,9 +36,17 @@ export async function apiFetch<T>(
   return res.json() as Promise<T>;
 }
 
+export function currencyLabel(locale: string) {
+  return locale === 'fa' ? 'ریال' : 'IRR';
+}
+
 export function formatRials(amount: number, locale: string) {
-  return new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : locale === 'de' ? 'de-DE' : 'en-US', {
-    style: 'decimal',
-    maximumFractionDigits: 0,
-  }).format(amount);
+  const formatted = new Intl.NumberFormat(
+    locale === 'fa' ? 'fa-IR' : locale === 'de' ? 'de-DE' : 'en-US',
+    {
+      style: 'decimal',
+      maximumFractionDigits: 0,
+    },
+  ).format(amount);
+  return `${formatted} ${currencyLabel(locale)}`;
 }

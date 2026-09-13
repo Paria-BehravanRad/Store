@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { apiFetch, formatRials } from '@/lib/api';
 import { GlassSelect } from '@/components/glass-select';
 
@@ -19,6 +19,7 @@ type Category = { id: string; slug: string; nameEn: string };
 
 export default function AdminProductsPage() {
   const t = useTranslations('admin');
+  const locale = useLocale();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -146,7 +147,7 @@ export default function AdminProductsPage() {
             <div className="min-w-0">
               <p className="font-medium">{p.nameEn}</p>
               <p className="truncate text-xs text-ink-700">
-                {p.slug} · {formatRials(p.priceRials, 'en')} IRR · stock {p.stock}
+                {p.slug} · {formatRials(p.priceRials, locale)} · stock {p.stock}
               </p>
             </div>
             <button type="button" className="btn-ghost shrink-0" onClick={() => remove(p.id)}>

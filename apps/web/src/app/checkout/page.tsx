@@ -99,7 +99,7 @@ export default function CheckoutPage() {
           />
         </label>
         <p className="text-sm text-ink-800">
-          {formatRials(totalRials, locale)} IRR · {items.length} lines
+          {formatRials(totalRials, locale)} · {items.length} lines
         </p>
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
         <button className="btn-primary w-full justify-center" disabled={loading} type="submit">

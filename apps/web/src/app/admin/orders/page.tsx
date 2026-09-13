@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { apiFetch, formatRials } from '@/lib/api';
 import { GlassSelect } from '@/components/glass-select';
 
@@ -24,6 +24,7 @@ const STATUS_OPTIONS = [
 
 export default function AdminOrdersPage() {
   const t = useTranslations('admin');
+  const locale = useLocale();
   const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,7 +57,7 @@ export default function AdminOrdersPage() {
                 {order.id}
               </p>
               <p className="break-words text-xs text-ink-700">
-                {formatRials(order.totalRials, 'en')} IRR ·{' '}
+                {formatRials(order.totalRials, locale)} ·{' '}
                 {new Date(order.createdAt).toLocaleString()}
               </p>
             </div>

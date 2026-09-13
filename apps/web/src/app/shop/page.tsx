@@ -85,7 +85,7 @@ export default async function ShopPage({
               <div className="mt-3 space-y-1 px-1">
                 <p className="font-medium text-ink-900">{nameOf(p, locale)}</p>
                 <p className="text-sm text-ink-700">
-                  {formatRials(p.priceRials, locale)} IRR
+                  {formatRials(p.priceRials, locale)}
                 </p>
                 <p className="text-xs text-ink-700/75">{t('inStock', { count: p.stock })}</p>
               </div>

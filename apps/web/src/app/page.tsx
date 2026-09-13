@@ -84,7 +84,7 @@ export default async function HomePage() {
               <div className="mt-3 space-y-1 px-1">
                 <p className="font-medium text-ink-900">{localizedName(p, locale)}</p>
                 <p className="text-sm text-ink-700">
-                  {formatRials(p.priceRials, locale)} IRR
+                  {formatRials(p.priceRials, locale)}
                 </p>
               </div>
             </Link>

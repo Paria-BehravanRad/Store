@@ -57,7 +57,7 @@ export default async function ProductPage({
           ← {t('back')}
         </Link>
         <h1 className="section-title text-3xl sm:text-4xl md:text-5xl">{name}</h1>
-        <p className="text-lg text-ink-800">{formatRials(product.priceRials, locale)} IRR</p>
+        <p className="text-lg text-ink-800">{formatRials(product.priceRials, locale)}</p>
         <p className="text-sm text-ink-700">{ts('inStock', { count: product.stock })}</p>
         <div className="space-y-2 border-t border-ink-900/10 pt-5">
           <h2 className="text-sm font-medium text-ink-700">{t('description')}</h2>
