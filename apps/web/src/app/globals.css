@@ -235,7 +235,7 @@ html.dark .site-glow {
   }
 
   .glass-select-trigger {
-    @apply inline-flex min-h-10 items-center justify-between gap-2 rounded-2xl border px-3 py-2 text-sm shadow-sm backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-10 max-w-full items-center justify-between gap-2 rounded-2xl border px-3 py-2 text-sm shadow-sm backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 disabled:cursor-not-allowed disabled:opacity-50;
     border-color: var(--vp-glass-border);
     background: color-mix(in srgb, var(--vp-glass) 88%, transparent);
     color: var(--vp-ink);
@@ -246,7 +246,7 @@ html.dark .site-glow {
   }
 
   .glass-menu {
-    @apply absolute z-50 mt-2 overflow-hidden rounded-2xl border p-1.5 backdrop-blur-xl animate-fade-up;
+    @apply absolute z-50 mt-2 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border p-1.5 backdrop-blur-xl animate-fade-up;
     border-color: var(--vp-glass-border);
     background: color-mix(in srgb, var(--vp-drawer) 92%, transparent);
     box-shadow: 0 12px 40px rgba(28, 25, 23, 0.14);

@@ -14,9 +14,9 @@ type UserRow = {
 };
 
 const ROLE_OPTIONS = [
-  { value: 'CUSTOMER', label: 'CUSTOMER' },
-  { value: 'ADMIN', label: 'ADMIN' },
-  { value: 'SUPER_ADMIN', label: 'SUPER_ADMIN' },
+  { value: 'CUSTOMER', label: 'Customer' },
+  { value: 'ADMIN', label: 'Admin' },
+  { value: 'SUPER_ADMIN', label: 'Super admin' },
 ];
 
 export default function AdminUsersPage() {
@@ -47,18 +47,18 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="w-full max-w-full min-w-0 space-y-4">
       <h1 className="section-title text-3xl">{t('users')}</h1>
       {error ? (
-        <p className="glass rounded-2xl p-4 text-sm text-red-700">
+        <p className="glass break-words rounded-2xl p-4 text-sm text-red-700">
           {error}. Sign in as admin first via /login.
         </p>
       ) : null}
 
       <div className="space-y-3 md:hidden">
         {users.map((user) => (
-          <div key={user.id} className="glass space-y-3 rounded-2xl p-4">
-            <p className="font-medium" dir="ltr">
+          <div key={user.id} className="glass max-w-full min-w-0 space-y-3 rounded-2xl p-3 sm:p-4">
+            <p className="truncate font-medium" dir="ltr">
               {user.phone}
             </p>
             <GlassSelect
@@ -67,9 +67,13 @@ export default function AdminUsersPage() {
               options={ROLE_OPTIONS}
               onChange={(role) => void setRole(user, role)}
             />
-            <div className="flex items-center justify-between gap-3 text-sm">
-              <span className="text-ink-700">{user.preferredLocale ?? '—'}</span>
-              <button type="button" className="btn-ghost !px-3 !py-2" onClick={() => toggleActive(user)}>
+            <div className="flex min-w-0 items-center justify-between gap-3 text-sm">
+              <span className="truncate text-ink-700">{user.preferredLocale ?? '—'}</span>
+              <button
+                type="button"
+                className="btn-ghost shrink-0 !px-3 !py-2"
+                onClick={() => toggleActive(user)}
+              >
                 {user.isActive ? 'Disable' : 'Enable'}
               </button>
             </div>
@@ -77,8 +81,8 @@ export default function AdminUsersPage() {
         ))}
       </div>
 
-      <div className="glass hidden overflow-x-auto rounded-3xl md:block">
-        <table className="min-w-full text-start text-sm">
+      <div className="glass hidden max-w-full overflow-x-auto rounded-3xl md:block">
+        <table className="min-w-[40rem] w-full text-start text-sm">
           <thead className="border-b border-ink-900/10 text-ink-700">
             <tr>
               <th className="px-4 py-3 font-medium">Phone</th>

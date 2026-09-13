@@ -74,7 +74,7 @@ export function GlassSelect<T extends string = string>({
   return (
     <div
       ref={rootRef}
-      className={`relative ${fullWidth ? 'w-full' : 'inline-flex'} ${className}`}
+      className={`relative max-w-full min-w-0 ${fullWidth ? 'w-full' : 'inline-flex max-w-full'} ${className}`}
     >
       {label ? (
         <span className="mb-1.5 block text-xs font-medium text-ink-700">{label}</span>
@@ -88,9 +88,11 @@ export function GlassSelect<T extends string = string>({
         aria-label={ariaLabel ?? label ?? placeholder}
         onClick={() => !disabled && setOpen((v) => !v)}
         onKeyDown={onTriggerKey}
-        className={`glass-select-trigger ${fullWidth ? 'w-full' : ''} ${triggerClassName}`}
+        className={`glass-select-trigger min-w-0 ${fullWidth ? 'w-full' : 'max-w-full'} ${triggerClassName}`}
       >
-        <span className="truncate">{selected?.label ?? placeholder}</span>
+        <span className="min-w-0 flex-1 truncate text-start">
+          {selected?.label ?? placeholder}
+        </span>
         <Chevron open={open} />
       </button>
 
@@ -99,7 +101,7 @@ export function GlassSelect<T extends string = string>({
           id={listId}
           role="listbox"
           className={`glass-menu ${align === 'end' ? 'end-0' : 'start-0'} ${
-            fullWidth ? 'w-full' : 'min-w-[12rem]'
+            fullWidth ? 'w-full' : 'min-w-[12rem] w-max max-w-[min(20rem,calc(100vw-2rem))]'
           }`}
         >
           {options.map((option) => {
@@ -114,7 +116,7 @@ export function GlassSelect<T extends string = string>({
                     setOpen(false);
                   }}
                 >
-                  <span className="font-medium">{option.label}</span>
+                  <span className="break-words font-medium">{option.label}</span>
                   {option.description ? (
                     <span className="mt-0.5 block text-xs text-ink-700/80">
                       {option.description}

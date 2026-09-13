@@ -75,13 +75,13 @@ export default function AdminProductsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-full min-w-0 space-y-6">
       <h1 className="section-title text-3xl">{t('products')}</h1>
-      {error ? <p className="text-sm text-red-700">{error}</p> : null}
+      {error ? <p className="break-words text-sm text-red-700">{error}</p> : null}
 
       <form
         onSubmit={onCreate}
-        className="glass grid gap-3 rounded-[1.5rem] p-4 sm:rounded-3xl sm:p-5 md:grid-cols-2"
+        className="glass grid max-w-full min-w-0 gap-3 rounded-[1.5rem] p-3 sm:rounded-3xl sm:p-5 md:grid-cols-2"
       >
         <GlassSelect
           fullWidth

@@ -13,14 +13,14 @@ type Order = {
 };
 
 const STATUS_OPTIONS = [
-  'PENDING_PAYMENT',
-  'PAID',
-  'PROCESSING',
-  'SHIPPED',
-  'DELIVERED',
-  'CANCELLED',
-  'REFUNDED',
-].map((s) => ({ value: s, label: s }));
+  { value: 'PENDING_PAYMENT', label: 'Pending payment' },
+  { value: 'PAID', label: 'Paid' },
+  { value: 'PROCESSING', label: 'Processing' },
+  { value: 'SHIPPED', label: 'Shipped' },
+  { value: 'DELIVERED', label: 'Delivered' },
+  { value: 'CANCELLED', label: 'Cancelled' },
+  { value: 'REFUNDED', label: 'Refunded' },
+];
 
 export default function AdminOrdersPage() {
   const t = useTranslations('admin');
@@ -42,18 +42,20 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="w-full max-w-full min-w-0 space-y-4">
       <h1 className="section-title text-3xl">{t('orders')}</h1>
-      {error ? <p className="text-sm text-red-700">{error}</p> : null}
+      {error ? <p className="break-words text-sm text-red-700">{error}</p> : null}
       <ul className="space-y-2">
         {orders.map((order) => (
           <li
             key={order.id}
-            className="glass flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between"
+            className="glass flex max-w-full min-w-0 flex-col gap-3 rounded-2xl p-3 sm:p-4"
           >
             <div className="min-w-0">
-              <p className="truncate font-medium">{order.id}</p>
-              <p className="text-xs text-ink-700">
+              <p className="truncate font-medium" title={order.id}>
+                {order.id}
+              </p>
+              <p className="break-words text-xs text-ink-700">
                 {formatRials(order.totalRials, 'en')} IRR ·{' '}
                 {new Date(order.createdAt).toLocaleString()}
               </p>
@@ -62,9 +64,7 @@ export default function AdminOrdersPage() {
               value={order.status}
               options={STATUS_OPTIONS}
               onChange={(status) => void setStatus(order.id, status)}
-              className="w-full sm:w-auto"
               fullWidth
-              triggerClassName="sm:!w-auto"
             />
           </li>
         ))}

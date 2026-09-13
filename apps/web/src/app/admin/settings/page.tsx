@@ -45,9 +45,12 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-lg space-y-4">
+    <div className="mx-auto w-full max-w-lg min-w-0 space-y-4">
       <h1 className="section-title text-3xl">{t('settings')}</h1>
-      <form onSubmit={onSave} className="glass space-y-4 rounded-[1.5rem] p-5 sm:rounded-3xl sm:p-6">
+      <form
+        onSubmit={onSave}
+        className="glass max-w-full space-y-4 rounded-[1.5rem] p-4 sm:rounded-3xl sm:p-6"
+      >
         <label className="block space-y-2 text-sm">
           <span>Store name</span>
           <input
